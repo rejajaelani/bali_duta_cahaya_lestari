@@ -1,30 +1,17 @@
 <?php
 session_start();
 
-include "controller/KoneksiController.php"; // Pastikan Anda memasukkan file yang benar
+include "./controller/KoneksiController.php";
 
-if (isset($_SESSION['login_status'])) {
-    $sql = "SELECT * FROM pengguna WHERE is_login = " . $_SESSION['login_status'];
-
-    $result = mysqli_query($conn, $sql);
-
-    if (!$result) {
-        // Query tidak berhasil
-        die("Error: " . mysqli_error($conn));
-    }
-
-    if (mysqli_num_rows($result) > 0) {
-        // Pengguna tidak memiliki akses yang valid, arahkan kembali ke halaman login atau halaman lain yang sesuai
-        header("Location: dashboard/");
-        exit; // Pastikan untuk menghentikan eksekusi kode setelah pengalihan
-    }
+if (isset($_SESSION['isLogin']) == true) {
+    header("Location: ./dashboard/");
+    exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-}
+$msg = isset($_SESSION['msg']) ? $_SESSION['msg'] : '';
 
 
+// echo $_SESSION['isLogin'];
 // Data sesuai dengan session login_status, tidak perlu mengarahkan
 // Anda dapat melanjutkan eksekusi kode jika pengguna memiliki akses yang valid
 ?>
@@ -34,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlobalXtreme | Log in</title>
+    <title>Bali Duta Cahaya Lestari | Log in</title>
     <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
@@ -50,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 if ($msg != '') { ?>
                     <div style="font-weight: bold;padding: 2px 10px;background-color: #FF6969;border-radius: 10px;"><?= $msg ?></div>
                 <?php } ?>
-                <form action="controller/LoginController.php" method="post">
+                <form action="controller/login.php" method="post">
                     <p style="text-align: center;">Welcome to</p>
                     <p style="text-align: center;font-weight: bold;">PT. XXXX</p>
                     <input type="email" name="email" id="email" placeholder="Alamat Email" required>
