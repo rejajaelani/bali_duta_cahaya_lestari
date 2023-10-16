@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "./KoneksiController.php";
 
@@ -35,26 +37,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Memindahkan file ke folder tujuan
             if (move_uploaded_file($fileTmpName, $filePath)) {
                 if ($result = mysqli_query($conn, $sql)) {
-                    if ($level == 1) {
-                        header("Location: ../data-user/pimpinan/");
-                        exit;
-                    } else if ($level == 2) {
-                        header("Location: ../data-user/admin/");
-                        exit;
-                    } else {
-                        header("Location: ../data-user/akunting/");
-                        exit;
-                    }
+                    $_SESSION['msg'] = [
+                        'key' => 'Data berhasil didaftarkan',
+                        'timestamp' => time()
+                    ];
+                    header("Location: ../data-user/");
+                    exit;
                 } else {
-                    echo "Error: " . mysqli_error($conn);
+                    $_SESSION['msg-f'] = [
+                        'key' => 'Error: ' . mysqli_error($conn),
+                        'timestamp' => time()
+                    ];
+                    header("Location: ../data-user/");
+                    exit;
                 }
             } else {
-                echo "Terjadi kesalahan saat mengunggah file.";
+                $_SESSION['msg-f'] = [
+                    'key' => 'Terjadi kesalahan saat mengunggah file',
+                    'timestamp' => time()
+                ];
+                header("Location: ../data-user/");
+                exit;
             }
         } else {
-            echo "Terjadi error saat mengunggah file.";
+            $_SESSION['msg-f'] = [
+                'key' => 'Terjadi error saat mengunggah file',
+                'timestamp' => time()
+            ];
+            header("Location: ../data-user/");
+            exit;
         }
     } else {
-        echo "Tipe file tidak valid. Hanya file gambar (jpeg, png, gif) yang diperbolehkan.";
+        $_SESSION['msg-w'] = [
+            'key' => 'Tipe file tidak valid. Hanya file gambar (jpeg, png, gif) yang diperbolehkan / gambar kosong',
+            'timestamp' => time()
+        ];
+        header("Location: ../data-user/");
+        exit;
     }
 }

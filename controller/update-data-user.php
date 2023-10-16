@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "./KoneksiController.php";
 
@@ -9,6 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $level = mysqli_real_escape_string($conn, $_POST['level']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
+    if (isset($_POST['ubah-password'])) {
+        $ubah_password = true;
+    } else {
+        $ubah_password = false;
+    }
 
     // Menggunakan password yang ada jika tidak ada yang baru diisi
     $existingPassword = mysqli_fetch_assoc(mysqli_query($conn, "SELECT password FROM tb_user WHERE id_user = '$id'"))['password'];
@@ -64,17 +71,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE tb_user SET nama = '$nama', email = '$email', username = '$username', password = '$password', status = '$status', foto = '$foto' WHERE id_user = '$id'";
 
     if ($result = mysqli_query($conn, $sql)) {
-        if ($level == 1) {
-            header("Location: ../data-user/pimpinan/");
-            exit;
-        } else if ($level == 2) {
-            header("Location: ../data-user/admin/");
+        if ($ubah_password == true) {
+            $_SESSION['msg'] = [
+                'key' => 'Password berhasil diupdate',
+                'timestamp' => time()
+            ];
+            header("Location: ../dashboard/");
             exit;
         } else {
-            header("Location: ../data-user/akunting/");
+            $_SESSION['msg'] = [
+                'key' => 'Data user berhasil di update',
+                'timestamp' => time()
+            ];
+            header("Location: ../data-user/");
             exit;
         }
     } else {
-        echo "Error: " . mysqli_error($conn);
+        $_SESSION['msg-f'] = [
+            'key' => 'Error: ' . mysqli_error($conn),
+            'timestamp' => time()
+        ];
+        header("Location: ../data-user/");
+        exit;
     }
 }

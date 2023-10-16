@@ -1,0 +1,23 @@
+.logo-dashboard {
+    width: auto;
+    height: 200px;
+    border-radius: 20px;
+}
+
+/* Data Table Custom Style */
+.col-md-5 {
+    display: none !important;
+}
+
+#example1_paginate {
+    float: left !important;
+}
+
+/* Custom Side Bar  */
+.sidebar-mini .main-sidebar {
+    transition: 0.2s ease-in-out !important;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar {
+    transition: 0.2s ease-in-out !important;
+}

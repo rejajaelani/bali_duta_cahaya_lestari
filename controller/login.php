@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_escape_string($conn, $_POST['email']);
     $password = mysqli_escape_string($conn, $_POST['password']);
 
-    $sql = "SELECT email, password FROM tb_user WHERE email = '$email'";
+    $sql = "SELECT id_user,email, password FROM tb_user WHERE email = '$email'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {
