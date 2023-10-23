@@ -3,7 +3,7 @@ session_start();
 
 include "../../controller/KoneksiController.php";
 
-$name_page = "Data User";
+$name_page = "Data Keterangan";
 $type_page = 2;
 
 ?>
@@ -24,13 +24,13 @@ $type_page = 2;
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6 col-lg-12">
-                            <h1 class="m-0">Tambah Data User</h1>
+                            <h1 class="m-0">Tambah Data Keterangan</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6 col-lg-12">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">Data Master</li>
-                                <li class="breadcrumb-item"><a href="../">Data User</a></li>
-                                <li class="breadcrumb-item active">Tambah Data User</li>
+                                <li class="breadcrumb-item"><a href="../">Data Keterangan</a></li>
+                                <li class="breadcrumb-item active">Tambah Data Keterangan</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -45,38 +45,17 @@ $type_page = 2;
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="../../controller/input-data-user.php" method="post" enctype="multipart/form-data">
+                                    <form action="../../controller/input-data-keterangan.php" method="post">
                                         <div class="form-group">
-                                            <label for="nama">Nama Lengkap</label>
-                                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Lengkap..." required>
+                                            <label for="keterangan">Keterangan</label>
+                                            <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" name="username" placeholder="Username..." required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email" placeholder="Email..." required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" name="password" placeholder="Password..." required>
-                                        </div>
-                                        <input type="hidden" name="status" id="status" value="1" required>
-                                        <div class="form-group">
-                                            <label for="level">Example select</label>
-                                            <select class="form-control" id="level" name="level" required>
-                                                <option style="display: none;"></option>
-                                                <?php if ($_SESSION['dataUser']['level'] == 2) { ?>
-                                                    <option value="1">Admin</option>
-                                                <?php } ?>
-                                                <option value="2">Pimpinan</option>
-                                                <option value="3">Akunting</option>
+                                            <label for="type-transaksi">Type Transaksi</label>
+                                            <select class="form-control" id="type-transaksi" name="type-transaksi">
+                                                <option value="1">Pemasukan</option>
+                                                <option value="2">Pengeluaran</option>
                                             </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="foto">Foto</label>
-                                            <input type="file" class="form-control-file" id="foto" name="foto">
                                         </div>
                                         <div class="row" style="width: max-content !important;">
                                             <div class="col">
@@ -119,14 +98,14 @@ $type_page = 2;
     <!-- ./wrapper -->
 
     <!-- Jquery -->
-    <script src="../assets/js/jQuery.js"></script>
+    <script src="../../assets/js/jQuery.js"></script>
     <!-- Data Table -->
-    <script src="../assets/js/dataTable.min.js"></script>
-    <script src="../assets/js/dataTable.bootstrap4.min.js"></script>
+    <script src="../../assets/js/dataTable.min.js"></script>
+    <script src="../../assets/js/dataTable.bootstrap4.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.js"></script>
+    <script src="../../assets/dist/js/adminlte.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="../assets/dist/js/demo.js"></script>
+    <script src="../../assets/dist/js/demo.js"></script>
     <!-- Script Here -->
     <script>
         $(document).ready(function() {

@@ -12,11 +12,11 @@ if (isset($_SESSION['isLogin']) != true) {
 
 include "../function/delMsg.php";
 
-$name_page = "Data User";
+$name_page = "Data Keterangan";
 $type_page = 1;
 
 // Inisialisasi variabel SQL
-$sql = "SELECT * FROM tb_user";
+$sql = "SELECT * FROM tb_keterangan";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -74,12 +74,12 @@ $result = mysqli_query($conn, $sql);
                             </div>
                         <?php } ?>
                         <div class="col-12">
-                            <h1>Data User</h1>
+                            <h1>Data Keterangan</h1>
                         </div>
                         <div class="col-12">
                             <ol class="breadcrumb float-left">
-                                <li class="breadcrumb-item">Data Master</li>
-                                <li class="breadcrumb-item active"><a href="./">Data User</a></li>
+                                <li class="breadcrumb-item">Data Keterangan</li>
+                                <li class="breadcrumb-item active"><a href="./">Data Keterangan</a></li>
                             </ol>
                         </div>
                     </div>
@@ -88,20 +88,21 @@ $result = mysqli_query($conn, $sql);
 
             <!-- Main content -->
             <section class="content">
+                <!-- Tabel Data Keterangan Pemasukan start -->
                 <div class="card">
-                    <div class="card-header" style="background-color: #F2F2F2 !important;">
-                        <a href="./tambah-data/" class="btn btn-success btn-sm">Tambah User</a>
+                    <div class="card-header" style="background-color: #FFFF !important;">
+                        <a href="./tambah-data/" class="btn btn-success">Tambah Data</a>
+                        <h5 class="text-center">Data Keterangan</h5>
                     </div>
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped" style="font-size: 12px !important;">
+                        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
-                                    <th>Level</th>
-                                    <th>Status</th>
-                                    <th>Register</th>
+                                    <th>Keterangan</th>
+                                    <th>Type Transaksi</th>
+                                    <th>Created At</th>
+                                    <th>Update At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -112,59 +113,43 @@ $result = mysqli_query($conn, $sql);
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
-                                        echo "<td>" . $row['email'] . "</td>";
-                                        $level = "";
-                                        if ($row['level'] == 1) {
-                                            $level = 'Admin';
-                                        } elseif ($row['level'] == 2) {
-                                            $level = 'Pimpinan';
-                                        } elseif ($row['level'] == 3) {
-                                            $level = 'Akunting';
+                                        echo "<td>" . $row['keterangan'] . "</td>";
+                                        if ($row['type_transaksi'] == 1) {
+                                            echo "<td>Pemasukan</td>";
+                                        } else {
+                                            echo "<td>Pengeluaran</td>";
                                         }
-                                        echo "<td>" . $level . "</td>";
-                                        $status = "";
-                                        if ($row['status'] == 1) {
-                                            $status = 'Active';
-                                        } elseif ($row['status'] == 0) {
-                                            $status = 'Non-Active';
-                                        }
-                                        echo "<td>" . $status . "</td>";
                                         echo "<td>" . $row['created_at'] . "</td>";
-                                        if ($_SESSION['dataUser']['level'] == 1 && $row['level'] == 1) {
+                                        echo "<td>" . $row['update_at'] . "</td>";
                                 ?>
-                                            <td style="width: 135px !important;">
-                                                <button class="btn btn-warning disabled">No Action</button>
-                                            </td>
-                                        <?php } else { ?>
-                                            <td style="width: 135px !important;">
-                                                <div class="wrapper" style="display: flex;gap: 10px;">
-                                                    <a href="edit-data/?id=<?= $row['id_user'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
-                                                        <i class="fas fa-pen"></i> Edit
-                                                    </a>
-                                                    <form action="../controller/delete-data-user.php" method="post">
-                                                        <input type="hidden" name="id" id="id" value="<?= $row['id_user'] ?>">
-                                                        <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
+                                        <td style="width: 135px !important;">
+                                            <div class="wrapper" style="display: flex;gap: 10px;">
+                                                <a href="edit-data/?id=<?= $row['id'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
+                                                    <i class="fas fa-pen"></i> Edit
+                                                </a>
+                                                <form action="../controller/delete-data-Keterangan.php" method="post">
+                                                    <input type="hidden" name="id" id="id" value="<?= $row['id'] ?>">
+                                                    <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                 <?php
-                                        }
                                         $no++; // Tingkatkan nomor baris setiap kali iterasi
                                     }
                                 } else {
                                     echo "<tr><td colspan='9'>Tidak ada data user.</td></tr>";
                                 }
 
-                                // Tutup koneksi
-                                $conn->close();
+
                                 ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <!-- Tabel Data Keterangan Pemasukan end -->
+
             </section>
             <!-- /.content -->
         </div>

@@ -48,7 +48,14 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>" class="nav-link">
+                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-keterangan" class="nav-link <?= ($name_page == 'Data Keterangan') ? 'active' : '' ?>">
+                                <i class="fas fa-sticky-note nav-icon"></i>
+                                <p>Data Keterangan</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-transaksi" class="nav-link <?= ($name_page == 'Data Transaksi') ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>
                                     Data Transaksi

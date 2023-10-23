@@ -69,6 +69,25 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                 <label for="email">Email</label>
                                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email..." value="<?= $row['email'] ?>" required>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="level">Level</label>
+                                                <select class="form-control" id="level" name="level" required>
+                                                    <option style="display: none;"></option>
+                                                    <?php if ($_SESSION['dataUser']['level'] == 2) { ?>
+                                                        <option value="1">Admin</option>
+                                                    <?php } ?>
+                                                    <option value="2">Pimpinan</option>
+                                                    <option value="3">Akunting</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status">Status</label>
+                                                <select class="form-control" id="status" name="status" required>
+                                                    <option style="display: none;"></option>
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Non-Active</option>
+                                                </select>
+                                            </div>
                                             <!-- <div class="form-group">
                                                 <label for="password">Password</label>
                                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
