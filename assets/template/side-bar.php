@@ -64,7 +64,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>" class="nav-link">
+                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-jurnal" class="nav-link <?= ($name_page == 'Data Jurnal') ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>
                                     Data Jurnal

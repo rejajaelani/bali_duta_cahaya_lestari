@@ -7,29 +7,13 @@ $name_page = "Data Transaksi";
 $type_page = 2;
 
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
+$id_transaksi = $id;
 
-if ($id === 0) {
-    $prefix = "TRX-";
-    $date = date("YmdHis"); // Format tanggal dan waktu
-    $counter = 1;
-
-    do {
-        $id_transaksi = $prefix . $date . sprintf("%04d", $counter); // sprintf untuk format angka 4 digit
-        $sql = "SELECT id_transaksi_masuk FROM tb_transaksi_masuk WHERE id_transaksi_masuk = '$id_transaksi'";
-        $result = mysqli_query($conn, $sql);
-
-        if (mysqli_num_rows($result) == 0) {
-            $unique = true;
-        } else {
-            $counter++;
-        }
-    } while (!$unique);
-} else {
-    $id_transaksi = $id;
-}
-
-$sql0 = "SELECT * FROM tb_detail_trans_masuk INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_masuk = '$id'";
+$sql0 = "SELECT * FROM tb_detail_trans_keluar INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_keluar = '$id'";
 $result0 = mysqli_query($conn, $sql0);
+
+$sql1 = "SELECT * FROM tb_transaksi_keluar tbtk INNER JOIN tb_keterangan tbk ON tbtk.id_keterangan = tbk.id WHERE tbtk.id_transaksi_keluar = '$id_transaksi'";
+$result1 = mysqli_query($conn, $sql1);
 
 $totalDebet = 0;
 $totalKredit = 0;
@@ -52,12 +36,13 @@ $totalKredit = 0;
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6 col-lg-12">
-                            <h1 class="m-0">Tambah Data Transaksi Pemasukan</h1>
+                            <h1 class="m-0">Edit Data Transaksi keluar</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6 col-lg-12">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="../">Data Transaksi</a></li>
-                                <li class="breadcrumb-item active">Tambah Data Transaksi Pemasukan</li>
+                                <li class="breadcrumb-item">Data Master</li>
+                                <li class="breadcrumb-item"><a href="../">Data Transaksi keluar</a></li>
+                                <li class="breadcrumb-item active">Edit Data Transaksi keluar</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -73,7 +58,7 @@ $totalKredit = 0;
                             <div class="card">
                                 <div class="card-body">
                                     <form id="tambahForm" action="../../controller/input-data-detail-trans-masuk.php" method="post">
-                                        <input type="hidden" name="type" value="1">
+                                        <input type="hidden" name="type" value="2">
                                         <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
                                         <div class="form-group row">
                                             <label for="id-akun" class="col-sm-2 col-form-label">Akun</label>
@@ -142,7 +127,7 @@ $totalKredit = 0;
                                                     $no++; // Tingkatkan nomor baris setiap kali iterasi
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='9'>Tidak ada data detail transaksi.</td></tr>";
+                                                echo "<tr><td colspan='9'>Tidak ada data user.</td></tr>";
                                             }
                                             ?>
                                             <tr>
@@ -153,43 +138,49 @@ $totalKredit = 0;
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <form id="simpanForm" action="../../controller/input-data-transaksi-masuk.php" method="post" class="mb-2 mt-4">
-                                        <div class="form-group row">
-                                            <label for="id-transaksi" class="col-sm-2 col-form-label">Id Transaksi</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="id-transaksi" name="id-transaksi" value="<?= $id_transaksi ?>" readonly required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="date" class="col-sm-2 col-form-label">Tanggal</label>
-                                            <div class="col-sm-10">
-                                                <input type="date" class="form-control" id="date" name="date" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id-keterangan" class="col-sm-2 col-form-label">Keterangan</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" id="id-keterangan" name="id-keterangan" required>
-                                                    <option style="display: none;"></option>
-                                                    <?php
-                                                    $sql = "SELECT * FROM tb_keterangan";
-                                                    $result = mysqli_query($conn, $sql);
-                                                    while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                        <option value="<?= $row['id'] ?>"><?= $row['keterangan'] ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="form-group row">
+                                    <form id="simpanForm" action="../../controller/update-data-transaksi-keluar.php" method="post" class="mb-2 mt-4">
+                                        <?php
+                                        if ($result1->num_rows > 0) {
+                                            while ($row = $result1->fetch_assoc()) {
+                                        ?>
+                                                <div class="form-group row">
+                                                    <label for="id-transaksi" class="col-sm-2 col-form-label">Id Transaksi</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="id-transaksi" name="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>" readonly required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="date" class="col-sm-2 col-form-label">Tanggal</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="date" class="form-control" id="date" name="date" value="<?= $row['tgl_trans_keluar'] ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="id-keterangan" class="col-sm-2 col-form-label">Keterangan</label>
+                                                    <div class="col-sm-10">
+                                                        <select class="form-control" id="id-keterangan" name="id-keterangan" required>
+                                                            <option style="display: none;"></option>
+                                                            <?php
+                                                            $sql = "SELECT * FROM tb_keterangan";
+                                                            $result = mysqli_query($conn, $sql);
+                                                            while ($row1 = mysqli_fetch_assoc($result)) { ?>
+                                                                <option <?= ($row['id'] == $row1['id']) ? 'selected' : '' ?> value="<?= $row1['id'] ?>"><?= $row1['keterangan'] ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group row">
                                             <label for="bukti" class="col-sm-2 col-form-label">Bukti Transaksi</label>
                                             <div class="col-sm-10">
                                                 <input type="file" class="form-control-file border p-2 rounded" id="bukti" name="bukti">
                                             </div>
                                         </div> -->
-                                        <div class="w-100 d-flex justify-content-end mb-4">
-                                            <a href="../../controller/discard-transaksi.php?id=<?= $id_transaksi ?>&type=1" class="btn btn-danger btn-sm mr-2">Discard Transaksi</a>
-                                            <button class="btn btn-success btn-sm" id="simpanButton">+ Tambah Transaksi</button>
-                                        </div>
+                                                <div class="w-100 d-flex justify-content-end mb-4">
+                                                    <a href="../" class="btn btn-danger btn-sm mr-2">Cancel</a>
+                                                    <button class="btn btn-primary btn-sm" id="simpanButton">Update Transaksi</button>
+                                                </div>
+                                        <?php }
+                                        } ?>
                                     </form>
                                 </div>
                             </div>

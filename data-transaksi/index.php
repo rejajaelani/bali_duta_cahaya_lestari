@@ -17,7 +17,7 @@ $type_page = 1;
 
 // Inisialisasi variabel SQL
 $sql1 = "SELECT * FROM tb_transaksi_masuk tbtm INNER JOIN tb_keterangan tbk ON tbtm.id_keterangan = tbk.id";
-$sql2 = "SELECT * FROM tb_transaksi_keluar";
+$sql2 = "SELECT * FROM tb_transaksi_keluar tbtk INNER JOIN tb_keterangan tbk ON tbtk.id_keterangan = tbk.id";
 $result_pemasukan = mysqli_query($conn, $sql1);
 $result_pengeluaran = mysqli_query($conn, $sql2);
 
@@ -148,16 +148,16 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                 <!-- Tabel Data Transaksi Pengeluaran start -->
                 <div class="card">
                     <div class="card-header" style="background-color: #FFFF !important;">
-                        <a href="./tambah-data/" class="btn btn-success">Tambah Data</a>
+                        <a href="./tambah-data-pengeluaran/" class="btn btn-success">Tambah Data</a>
                         <h5 class="text-center">Data Transaksi Pengeluaran</h5>
                     </div>
                     <div class="card-body">
-                        <!-- <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
+                        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Bulan Transaksi</th>
-                                    <th>Status</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -168,16 +168,17 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     while ($row = $result_pengeluaran->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
-                                        echo "<td>" . $row['status'] . "</td>";
+                                        echo "<td>" . $row['keterangan'] . "</td>";
+                                        echo "<td>" . $row['tgl_trans_keluar'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <div class="wrapper" style="display: flex;gap: 10px;">
-                                                <a href="edit-data/?id=<?= $row['id_user'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
+                                                <a href="edit-data-pengeluaran/?id=<?= $row['id_transaksi_keluar'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
                                                     <i class="fas fa-pen"></i> Edit
                                                 </a>
-                                                <form action="../controller/delete-data-user.php" method="post">
-                                                    <input type="hidden" name="id" id="id" value="<?= $row['id_user'] ?>">
+                                                <form action="../controller/delete-data-transaksi.php" method="post">
+                                                    <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>">
+                                                    <input type="hidden" name="type" id="type" value="2">
                                                     <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
                                                         <i class="fas fa-times"></i> Delete
                                                     </button>
@@ -191,9 +192,10 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     echo "<tr><td colspan='9'>Tidak ada data user.</td></tr>";
                                 }
 
+
                                 ?>
                             </tbody>
-                        </table> -->
+                        </table>
                     </div>
                 </div>
                 <!-- Tabel Data Transaksi Pengeluaran end -->

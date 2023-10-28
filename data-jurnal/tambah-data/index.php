@@ -3,19 +3,19 @@ session_start();
 
 include "../../controller/KoneksiController.php";
 
-$name_page = "Data Transaksi";
+$name_page = "Data Jurnal";
 $type_page = 2;
 
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 
 if ($id === 0) {
-    $prefix = "TRX-";
+    $prefix = "JRL-";
     $date = date("YmdHis"); // Format tanggal dan waktu
     $counter = 1;
 
     do {
-        $id_transaksi = $prefix . $date . sprintf("%04d", $counter); // sprintf untuk format angka 4 digit
-        $sql = "SELECT id_transaksi_masuk FROM tb_transaksi_masuk WHERE id_transaksi_masuk = '$id_transaksi'";
+        $id_jurnal = $prefix . $date . sprintf("%04d", $counter); // sprintf untuk format angka 4 digit
+        $sql = "SELECT id_jurnal FROM tb_jurnal WHERE id_jurnal = '$id_jurnal'";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) == 0) {
@@ -25,10 +25,10 @@ if ($id === 0) {
         }
     } while (!$unique);
 } else {
-    $id_transaksi = $id;
+    $id_jurnal = $id;
 }
 
-$sql0 = "SELECT * FROM tb_detail_trans_masuk INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_masuk = '$id'";
+$sql0 = "SELECT * FROM tb_detail_jurnal INNER JOIN tb_akun USING (id_akun) WHERE id_jurnal = '$id'";
 $result0 = mysqli_query($conn, $sql0);
 
 $totalDebet = 0;
@@ -52,12 +52,12 @@ $totalKredit = 0;
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6 col-lg-12">
-                            <h1 class="m-0">Tambah Data Transaksi Pemasukan</h1>
+                            <h1 class="m-0">Tambah Data Jurnal</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6 col-lg-12">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="../">Data Transaksi</a></li>
-                                <li class="breadcrumb-item active">Tambah Data Transaksi Pemasukan</li>
+                                <li class="breadcrumb-item"><a href="../">Data Jurnal</a></li>
+                                <li class="breadcrumb-item active">Tambah Data Jurnal</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -72,9 +72,9 @@ $totalKredit = 0;
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form id="tambahForm" action="../../controller/input-data-detail-trans-masuk.php" method="post">
+                                    <form id="tambahForm" action="../../controller/input-data-detail-jurnal.php" method="post">
                                         <input type="hidden" name="type" value="1">
-                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
+                                        <input type="hidden" name="id-jurnal" id="id-jurnal" value="<?= $id_jurnal ?>">
                                         <div class="form-group row">
                                             <label for="id-akun" class="col-sm-2 col-form-label">Akun</label>
                                             <div class="col-sm-10">
@@ -98,7 +98,7 @@ $totalKredit = 0;
                                                 <input type="number" class="form-control" name="kredit" placeholder="Kredit">
                                             </div>
                                             <div class="form-group col-12">
-                                                <button class="btn btn-warning btn-sm float-right" id="tambahButton">+ Tambah Detail Transaksi</button>
+                                                <button class="btn btn-warning btn-sm float-right" id="tambahButton">+ Tambah Detail Jurnal</button>
                                             </div>
                                         </div>
                                     </form>
@@ -125,8 +125,8 @@ $totalKredit = 0;
                                                     echo "<td>" . $row['kredit'] . "</td>";
                                             ?>
                                                     <td style="width: 20px !important;">
-                                                        <form action="../../controller/delete-data-detail-trans-masuk.php" method="post">
-                                                            <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
+                                                        <form action="../../controller/delete-data-detail-jurnal.php" method="post">
+                                                            <input type="hidden" name="id-jurnal" id="id-jurnal" value="<?= $id_jurnal ?>">
                                                             <input type="hidden" name="id" id="id" value="<?= $row['id'] ?>">
                                                             <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
                                                                 <i class="fas fa-times"></i>
@@ -142,7 +142,7 @@ $totalKredit = 0;
                                                     $no++; // Tingkatkan nomor baris setiap kali iterasi
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='9'>Tidak ada data detail transaksi.</td></tr>";
+                                                echo "<tr><td colspan='9'>Tidak ada data detail jurnal.</td></tr>";
                                             }
                                             ?>
                                             <tr>
@@ -153,11 +153,11 @@ $totalKredit = 0;
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <form id="simpanForm" action="../../controller/input-data-transaksi-masuk.php" method="post" class="mb-2 mt-4">
+                                    <form id="simpanForm" action="../../controller/input-data-jurnal.php" method="post" class="mb-2 mt-4">
                                         <div class="form-group row">
-                                            <label for="id-transaksi" class="col-sm-2 col-form-label">Id Transaksi</label>
+                                            <label for="id-jurnal" class="col-sm-2 col-form-label">Id Jurnal</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="id-transaksi" name="id-transaksi" value="<?= $id_transaksi ?>" readonly required>
+                                                <input type="text" class="form-control" id="id-jurnal" name="id-jurnal" value="<?= $id_jurnal ?>" readonly required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -181,14 +181,14 @@ $totalKredit = 0;
                                             </div>
                                         </div>
                                         <!-- <div class="form-group row">
-                                            <label for="bukti" class="col-sm-2 col-form-label">Bukti Transaksi</label>
+                                            <label for="bukti" class="col-sm-2 col-form-label">Bukti jurnal</label>
                                             <div class="col-sm-10">
                                                 <input type="file" class="form-control-file border p-2 rounded" id="bukti" name="bukti">
                                             </div>
                                         </div> -->
                                         <div class="w-100 d-flex justify-content-end mb-4">
-                                            <a href="../../controller/discard-transaksi.php?id=<?= $id_transaksi ?>&type=1" class="btn btn-danger btn-sm mr-2">Discard Transaksi</a>
-                                            <button class="btn btn-success btn-sm" id="simpanButton">+ Tambah Transaksi</button>
+                                            <a href="../../controller/discard-jurnal.php?id=<?= $id_jurnal ?>&type=1" class="btn btn-danger btn-sm mr-2">Discard Jurnal</a>
+                                            <button class="btn btn-success btn-sm" id="simpanButton">+ Tambah Jurnal</button>
                                         </div>
                                     </form>
                                 </div>
