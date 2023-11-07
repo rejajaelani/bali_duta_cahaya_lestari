@@ -14,6 +14,10 @@ include "../function/delMsg.php";
 $name_page = "Dashboard";
 $type_page = 1;
 
+$sqlUser = "SELECT * FROM tb_user WHERE id_user = " . $_SESSION['dataUser']["id_user"];
+$resultUser = mysqli_query($conn, $sqlUser);
+$row = mysqli_fetch_assoc($resultUser);
+
 ?>
 
 <?php include "../assets/template/header.php" ?>
@@ -80,14 +84,24 @@ $type_page = 1;
             <!-- Main content -->
             <section class="content">
                 <?php
-                $totalPengeluaran = 75000000;
-                $totalPemasukan = 75000000;
+                $sql1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk";
+                $sql2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar";
+                $sql3 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal";
+                $result1 = mysqli_query($conn, $sql1);
+                $result2 = mysqli_query($conn, $sql2);
+                $result3 = mysqli_query($conn, $sql3);
+                $row1 = mysqli_fetch_assoc($result1);
+                $row2 = mysqli_fetch_assoc($result2);
+                $row3 = mysqli_fetch_assoc($result3);
+
+                $totalPengeluaran = $row1['Kredit'] + $row2['Kredit'] + $row3['Kredit'];
+                $totalPemasukan = $row1['Debet'] + $row2['Debet'] + $row3['Debet'];
                 ?>
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-body d-flex justify-content-center flex-column align-items-center text-white rounded" style="background-color: #1AB394;">
                         <h3>Selamat Datang di PT. Bali Duta Cahaya Lestari</h3>
-                        <p>Bima X</p>
+                        <p><?= $row['nama'] ?></p>
                         <img class="logo-dashboard" src="../images/logo.png" alt="Logo dasboard">
                     </div>
                     <!-- /.card-body -->

@@ -70,7 +70,7 @@ $type_page = 2;
                                         <div class="form-group">
                                             <label for="sifat-akun">Sifat Akun</label>
                                             <select class="form-control" id="sifat-akun" name="sifat-akun" required>
-                                                <option>Debit</option>
+                                                <option>Debet</option>
                                                 <option>Kredit</option>
                                             </select>
                                         </div>

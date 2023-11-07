@@ -92,10 +92,10 @@ $totalKredit = 0;
                                         <div class="form-row">
                                             <label for="nominal" class="col-2 col-form-label">Nominal</label>
                                             <div class="form-group col-5">
-                                                <input type="number" class="form-control" name="debet" placeholder="Debet">
+                                                <input type="text" class="form-control" name="debet" placeholder="Debet" onkeyup="formatCurrency(this)">
                                             </div>
                                             <div class="form-group col-5">
-                                                <input type="number" class="form-control" name="kredit" placeholder="Kredit">
+                                                <input type="text" class="form-control" name="kredit" placeholder="Kredit" onkeyup="formatCurrency(this)">
                                             </div>
                                             <div class="form-group col-12">
                                                 <button class="btn btn-warning btn-sm float-right" id="tambahButton">+ Tambah Detail Transaksi</button>
@@ -172,7 +172,7 @@ $totalKredit = 0;
                                                 <select class="form-control" id="id-keterangan" name="id-keterangan" required>
                                                     <option style="display: none;"></option>
                                                     <?php
-                                                    $sql = "SELECT * FROM tb_keterangan";
+                                                    $sql = "SELECT * FROM tb_keterangan WHERE type_transaksi = 2";
                                                     $result = mysqli_query($conn, $sql);
                                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                                         <option value="<?= $row['id'] ?>"><?= $row['keterangan'] ?></option>
@@ -235,6 +235,20 @@ $totalKredit = 0;
         $(document).ready(function() {
             $("#example1").DataTable();
         });
+
+        function formatCurrency(input) {
+            // Menghapus tanda koma yang ada dalam input
+            var value = input.value.replace(/,/g, '');
+
+            // Menghapus karakter selain angka
+            value = value.replace(/\D/g, '');
+
+            // Mengubah angka menjadi format ribuan
+            value = new Intl.NumberFormat().format(value);
+
+            // Menampilkan hasil di input
+            input.value = value;
+        }
 
         // Mengendalikan tindakan tambah dan simpan
         document.getElementById('tambahButton').addEventListener('click', function(e) {

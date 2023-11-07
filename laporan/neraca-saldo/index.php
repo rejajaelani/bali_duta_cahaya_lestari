@@ -2,34 +2,35 @@
 
 session_start();
 
-include "../controller/KoneksiController.php";
+include "../../controller/KoneksiController.php";
 
 if (isset($_SESSION['isLogin']) != true) {
-    header("Location: ../");
+    header("Location: ../../");
     exit;
 }
 
+include "../../function/delMsg.php";
 
-include "../function/delMsg.php";
-
-$name_page = "Data Jurnal";
-$type_page = 1;
+$name_page = "Laporan Neraca Saldo";
+$type_page = 2;
 
 // Inisialisasi variabel SQL
-$sql = "SELECT * FROM tb_jurnal tbj INNER JOIN tb_keterangan tbk ON tbj.id_keterangan = tbk.id LEFT JOIN tb_detail_jurnal USING (id_jurnal) LEFT JOIN tb_akun USING (id_akun) ORDER BY tbj.id_jurnal";
+$sql = "SELECT ta.*, SUM(tdtm.`debet`) AS Debet, SUM(tdtm.`kredit`) AS Kredit FROM tb_akun ta INNER JOIN tb_detail_trans_masuk tdtm ON ta.`id_akun` = tdtm.`id_akun` GROUP BY ta.`id_akun` ORDER BY ta.`id_akun` ASC";
+$sql2 = "SELECT ta.*, SUM(tdtm.`debet`) AS Debet, SUM(tdtm.`kredit`) AS Kredit FROM tb_akun ta INNER JOIN tb_detail_trans_keluar tdtm ON ta.`id_akun` = tdtm.`id_akun` GROUP BY ta.`id_akun` ORDER BY ta.`id_akun` ASC";
 $result = mysqli_query($conn, $sql);
+$result2 = mysqli_query($conn, $sql2);
 
 ?>
 
-<?php include "../assets/template/header.php" ?>
+<?php include "../../assets/template/header.php" ?>
 
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
     <div class="wrapper">
 
-        <?php include "../assets/template/navbar.php" ?>
+        <?php include "../../assets/template/navbar.php" ?>
 
-        <?php include "../assets/template/side-bar.php" ?>
+        <?php include "../../assets/template/side-bar.php" ?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -74,12 +75,12 @@ $result = mysqli_query($conn, $sql);
                             </div>
                         <?php } ?>
                         <div class="col-12">
-                            <h1>Data Jurnal</h1>
+                            <h1>Laporan Neraca Saldo</h1>
                         </div>
                         <div class="col-12">
                             <ol class="breadcrumb float-left">
-                                <li class="breadcrumb-item">Data Jurnal</li>
-                                <li class="breadcrumb-item active"><a href="./">Data Jurnal</a></li>
+                                <li class="breadcrumb-item">Laporan</li>
+                                <li class="breadcrumb-item"><a href="./">Laporan Neraca Saldo</a></li>
                             </ol>
                         </div>
                     </div>
@@ -88,83 +89,90 @@ $result = mysqli_query($conn, $sql);
 
             <!-- Main content -->
             <section class="content">
-                <!-- Tabel Data Transaksi Pemasukan start -->
                 <div class="card">
-                    <div class="card-header" style="background-color: #FFFF !important;">
-                        <a href="./tambah-data/" class="btn btn-success">Tambah Data</a>
-                        <h5 class="text-center">Data Transaksi Jurnal</h5>
+                    <div class="card-header" style="background-color: #F2F2F2 !important;">
+                        <a href="./tambah-data/" class="btn btn-success btn-sm">Tambah Akun</a>
+                        <a href="./tambah-kategori/" class="btn btn-secondary btn-sm">Tambah Kategori</a>
                     </div>
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
+                        <h5 class="font-weight-bold" style="opacity: 0.2;">Neraca Saldo Pemasukan</h5>
+                        <table class="table table-bordered table-striped" style="font-size: 14px !important;">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Keterangan</th>
-                                    <th>Kode Akun</th>
+                                    <th>No Akun</th>
                                     <th>Nama Akun</th>
                                     <th>Debet</th>
                                     <th>Kredit</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 if ($result->num_rows > 0) {
-                                    $no = 0;
-                                    $previousIdTransaksi = null; // Inisialisasi variabel untuk melacak id_transaksi sebelumnya
-
+                                    $jumDebet = 0;
+                                    $jumKredit = 0;
                                     while ($row = $result->fetch_assoc()) {
-                                        $no++;
                                         echo "<tr>";
-                                        echo "<td>" . $no . "</td>";
-
-                                        if ($row['id_jurnal'] != $previousIdTransaksi) {
-                                            // Hanya tampilkan tanggal dan keterangan jika id_transaksi berbeda
-                                            echo "<td>" . $row['tgl_jurnal'] . "</td>";
-                                            echo "<td>" . $row['keterangan'] . "</td>";
-                                        } else {
-                                            // Kosongkan kolom Tanggal dan Keterangan jika id_transaksi sama
-                                            echo "<td></td>";
-                                            echo "<td></td>";
-                                        }
-
                                         echo "<td>" . $row['id_akun'] . "</td>";
                                         echo "<td>" . $row['nama'] . "</td>";
-                                        echo "<td>" . $row['debet'] . "</td>";
-                                        echo "<td>" . $row['kredit'] . "</td";
-                                        echo "<td></td>";
-                                        echo "<td>" ?>
-                                        <div class="wrapper" style="display: flex;gap: 10px; width: 90px;">
-                                            <a href="edit-data/?id=<?= $row['id_jurnal'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
-                                                <i class="fas fa-pen"></i> Edit
-                                            </a>
-                                            <form action="../controller/delete-data-jurnal.php" method="post">
-                                                <input type="hidden" name="id-jurnal" id="id-jurnal" value="<?= $row['id_jurnal'] ?>">
-                                                <input type="hidden" name="type" id="type" value="2">
-                                                <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                    <i class="fas fa-times"></i> Delete
-                                                </button>
-                                            </form>
-                                        </div>
-                                <?php "</td>";
-
+                                        echo "<td>" . $row['Debet'] . "</td>";
+                                        echo "<td>" . $row['Kredit'] . "</td>";
                                         echo "</tr>";
-
-
-                                        $previousIdTransaksi = $row['id_jurnal']; // Simpan id_transaksi sebelumnya
+                                        $jumDebet += $row['Debet'];
+                                        $jumKredit += $row['Kredit'];
                                     }
+                                ?>
+                                    <tr>
+                                        <td colspan="2" class="font-weight-bold">Jumlah</td>
+                                        <td><?= $jumDebet ?></td>
+                                        <td><?= $jumKredit ?></td>
+                                    </tr>
+                                <?php
                                 } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data jurnal.</td></tr>";
+                                    echo "<tr><td colspan='9'>Tidak ada data akun.</td></tr>";
                                 }
-
+                                ?>
+                            </tbody>
+                        </table>
+                        <h5 class="font-weight-bold mt-4" style="opacity: 0.2;">Neraca Saldo Pengeluaran</h5>
+                        <table class="table table-bordered table-striped" style="font-size: 14px !important;">
+                            <thead>
+                                <tr>
+                                    <th>No Akun</th>
+                                    <th>Nama Akun</th>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($result2->num_rows > 0) {
+                                    $jumDebet = 0;
+                                    $jumKredit = 0;
+                                    while ($row = $result2->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row['id_akun'] . "</td>";
+                                        echo "<td>" . $row['nama'] . "</td>";
+                                        echo "<td>" . $row['Debet'] . "</td>";
+                                        echo "<td>" . $row['Kredit'] . "</td>";
+                                        echo "</tr>";
+                                        $jumDebet += $row['Debet'];
+                                        $jumKredit += $row['Kredit'];
+                                    }
+                                ?>
+                                    <tr>
+                                        <td colspan="2" class="font-weight-bold">Jumlah</td>
+                                        <td><?= $jumDebet ?></td>
+                                        <td><?= $jumKredit ?></td>
+                                    </tr>
+                                <?php
+                                } else {
+                                    echo "<tr><td colspan='9'>Tidak ada data akun.</td></tr>";
+                                }
                                 ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <!-- Tabel Data Transaksi Pemasukan end -->
-
             </section>
             <!-- /.content -->
         </div>
@@ -187,23 +195,22 @@ $result = mysqli_query($conn, $sql);
     <!-- ./wrapper -->
 
     <!-- Jquery -->
-    <script src="../assets/js/jQuery.js"></script>
+    <script src="../../assets/js/jQuery.js"></script>
     <!-- Data Table -->
-    <script src="../assets/js/dataTable.min.js"></script>
-    <script src="../assets/js/dataTable.bootstrap4.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../assets/dist/js/adminlte.js"></script>
+    <script src="../../assets/js/dataTable.min.js"></script>
+    <script src="../../assets/js/dataTable.bootstrap4.min.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../assets/dist/js/adminlte.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="../assets/dist/js/demo.js"></script>
+    <script src="../../assets/dist/js/demo.js"></script>
     <!-- Script Here -->
-    <script>
+    <!-- <script>
         $(document).ready(function() {
             $("#example1").DataTable();
         });
-    </script>
-
+    </script> -->
 </body>
 
 </html>

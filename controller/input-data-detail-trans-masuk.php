@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id_transaksi = mysqli_escape_string($conn, $_POST['id-transaksi']);
     $id_akun = mysqli_escape_string($conn, $_POST['id-akun']);
-    $debet = mysqli_escape_string($conn, $_POST['debet']);
-    $kredit = mysqli_escape_string($conn, $_POST['kredit']);
+    $debet = isset($_POST['debet']) ? mysqli_escape_string($conn, intval(str_replace(',', '', $_POST['debet']))) : 0;
+    $kredit = isset($_POST['kredit']) ? mysqli_escape_string($conn, intval(str_replace(',', '', $_POST['kredit']))) : 0;
     $type = mysqli_escape_string($conn, $_POST['type']);
 
     $sql = "INSERT INTO tb_detail_trans_masuk (id_transaksi_masuk, id_akun, debet, kredit, update_at) VALUES('$id_transaksi', '$id_akun', $debet, $kredit, '$tgl_now')";

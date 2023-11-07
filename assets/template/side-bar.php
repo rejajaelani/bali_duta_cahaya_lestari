@@ -72,7 +72,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item <?= ($name_page == 'Laporan Neraca Saldo' || $name_page == 'Laporan Jurnal Umum') ? 'menu-is-opening menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -82,15 +82,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>assets/index.html" class="nav-link">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/neraca-saldo" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Data User</p>
+                                        <p>Data Akun</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>assets/index2.html" class="nav-link">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/neraca-saldo" class="nav-link <?= ($name_page == 'Laporan Neraca Saldo') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Data Akun</p>
+                                        <p>Laporan Neraca Saldo</p>
                                     </a>
                                 </li>
                             </ul>
