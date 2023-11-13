@@ -63,10 +63,19 @@ $result = mysqli_query($conn, $sql);
                                                     <textarea class="form-control" id="keterangan" name="keterangan" rows="3"><?= $row['keterangan'] ?></textarea>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="type-keterangan">Type Keterangan</label>
+                                                    <select class="form-control" id="type-keterangan" name="type-keterangan">
+                                                        <option <?= ($row['type_keterangan'] == 1) ? 'selected' : '' ?> value="1">Operasional</option>
+                                                        <option <?= ($row['type_keterangan'] == 2) ? 'selected' : '' ?> value="2">Investasi</option>
+                                                        <option <?= ($row['type_keterangan'] == 3) ? 'selected' : '' ?> value="3">Pendanaan</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="type-transaksi">Type Transaksi</label>
                                                     <select class="form-control" id="type-transaksi" name="type-transaksi">
                                                         <option <?= ($row['type_transaksi'] == 1) ? 'selected' : '' ?> value="1">Pemasukan</option>
                                                         <option <?= ($row['type_transaksi'] == 2) ? 'selected' : '' ?> value="2">Pengeluaran</option>
+                                                        <option <?= ($row['type_transaksi'] == 3) ? 'selected' : '' ?> value="3">Jurnal</option>
                                                     </select>
                                                 </div>
                                                 <div class="row" style="width: max-content !important;">

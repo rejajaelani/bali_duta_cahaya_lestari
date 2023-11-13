@@ -100,6 +100,7 @@ $result = mysqli_query($conn, $sql);
                                 <tr>
                                     <th>No</th>
                                     <th>Keterangan</th>
+                                    <th>Type Keterangan</th>
                                     <th>Type Transaksi</th>
                                     <th>Created At</th>
                                     <th>Update At</th>
@@ -114,10 +115,23 @@ $result = mysqli_query($conn, $sql);
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['keterangan'] . "</td>";
+                                        if ($row['type_keterangan'] == 1) {
+                                            echo "<td>Operasional</td>";
+                                        } elseif ($row['type_keterangan'] == 2) {
+                                            echo "<td>Investasi</td>";
+                                        } elseif ($row['type_keterangan'] == 3) {
+                                            echo "<td>Pendanaan</td>";
+                                        } else {
+                                            echo "<td>-</td>";
+                                        }
                                         if ($row['type_transaksi'] == 1) {
                                             echo "<td>Pemasukan</td>";
-                                        } else {
+                                        } elseif ($row['type_transaksi'] == 2) {
                                             echo "<td>Pengeluaran</td>";
+                                        } elseif ($row['type_transaksi'] == 3) {
+                                            echo "<td>Jurnal</td>";
+                                        } else {
+                                            echo "<td>-</td>";
                                         }
                                         echo "<td>" . $row['created_at'] . "</td>";
                                         echo "<td>" . $row['update_at'] . "</td>";

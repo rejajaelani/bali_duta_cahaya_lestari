@@ -51,10 +51,21 @@ $type_page = 2;
                                             <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
+                                            <label for="type-keterangan">Type Keterangan</label>
+                                            <select class="form-control" id="type-keterangan" name="type-keterangan">
+                                                <option value="0">Select Type Keterangan</option>
+                                                <option value="1">Operasional</option>
+                                                <option value="2">Investasi</option>
+                                                <option value="3">Pendanaan</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="type-transaksi">Type Transaksi</label>
                                             <select class="form-control" id="type-transaksi" name="type-transaksi">
+                                                <option value="0">Select Type Transaksi</option>
                                                 <option value="1">Pemasukan</option>
                                                 <option value="2">Pengeluaran</option>
+                                                <option value="3">Jurnal</option>
                                             </select>
                                         </div>
                                         <div class="row" style="width: max-content !important;">

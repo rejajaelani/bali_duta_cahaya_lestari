@@ -112,23 +112,21 @@ $result = mysqli_query($conn, $sql);
                                 <?php
                                 if ($result->num_rows > 0) {
                                     $no = 0;
-                                    $previousIdTransaksi = null; // Inisialisasi variabel untuk melacak id_transaksi sebelumnya
+                                    $previousTanggalJurnal = null; // Inisialisasi variabel untuk melacak tanggal_jurnal sebelumnya
 
                                     while ($row = $result->fetch_assoc()) {
                                         $no++;
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
 
-                                        if ($row['id_jurnal'] != $previousIdTransaksi) {
+                                        if ($row['tgl_jurnal'] != $previousTanggalJurnal) {
                                             // Hanya tampilkan tanggal dan keterangan jika id_transaksi berbeda
                                             echo "<td>" . $row['tgl_jurnal'] . "</td>";
-                                            echo "<td>" . $row['keterangan'] . "</td>";
                                         } else {
                                             // Kosongkan kolom Tanggal dan Keterangan jika id_transaksi sama
                                             echo "<td></td>";
-                                            echo "<td></td>";
                                         }
-
+                                        echo "<td>" . $row['keterangan'] . "</td>";
                                         echo "<td>" . $row['id_akun'] . "</td>";
                                         echo "<td>" . $row['nama'] . "</td>";
                                         echo "<td>" . $row['debet'] . "</td>";
@@ -152,7 +150,7 @@ $result = mysqli_query($conn, $sql);
                                         echo "</tr>";
 
 
-                                        $previousIdTransaksi = $row['id_jurnal']; // Simpan id_transaksi sebelumnya
+                                        $previousTanggalJurnal = $row['tgl_jurnal']; // Simpan tanggal_jurnal sebelumnya
                                     }
                                 } else {
                                     echo "<tr><td colspan='9'>Tidak ada data jurnal.</td></tr>";

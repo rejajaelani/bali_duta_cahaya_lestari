@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id_jurnal = mysqli_escape_string($conn, $_POST['id-jurnal']);
     $tgl = mysqli_escape_string($conn, $_POST['date']);
-    $id_keterangan = intval(mysqli_escape_string($conn, $_POST['id-keterangan']));
+    $id_keterangan = intval(mysqli_escape_string($conn, $_POST['id-keterangan'])) ?? 0;
 
     $sql = "INSERT INTO tb_jurnal (id_jurnal, id_keterangan, tgl_jurnal, update_at) VALUES ('$id_jurnal', $id_keterangan, '$tgl', '$tgl_now')";
     $result = mysqli_query($conn, $sql);

@@ -1,3 +1,8 @@
+<?php
+$sqlUser = "SELECT * FROM tb_user WHERE id_user = " . $_SESSION['dataUser']["id_user"];
+$resultUser = mysqli_query($conn, $sqlUser);
+$row = mysqli_fetch_assoc($resultUser);
+?>
 <!DOCTYPE html>
 <html lang="en">
 

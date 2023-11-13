@@ -64,19 +64,17 @@ $type_page = 2;
                                         </div>
                                         <input type="hidden" name="status" id="status" value="1" required>
                                         <div class="form-group">
-                                            <label for="level">Example select</label>
+                                            <label for="level">Status User</label>
                                             <select class="form-control" id="level" name="level" required>
                                                 <option style="display: none;"></option>
-                                                <?php if ($_SESSION['dataUser']['level'] == 2) { ?>
-                                                    <option value="1">Admin</option>
-                                                <?php } ?>
+                                                <option value="1">Admin</option>
                                                 <option value="2">Pimpinan</option>
                                                 <option value="3">Akunting</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="foto">Foto</label>
-                                            <input type="file" class="form-control-file" id="foto" name="foto">
+                                            <input type="file" class="form-control-file" id="foto" name="foto" required>
                                         </div>
                                         <div class="row" style="width: max-content !important;">
                                             <div class="col">

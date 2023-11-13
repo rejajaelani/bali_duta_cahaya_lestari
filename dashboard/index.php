@@ -14,9 +14,16 @@ include "../function/delMsg.php";
 $name_page = "Dashboard";
 $type_page = 1;
 
-$sqlUser = "SELECT * FROM tb_user WHERE id_user = " . $_SESSION['dataUser']["id_user"];
-$resultUser = mysqli_query($conn, $sqlUser);
-$row = mysqli_fetch_assoc($resultUser);
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+if (isset($_GET['src-year'])) {
+    $selectedYear = intval($_GET['src-year']);
+} else {
+    $selectedYear = intval($currentYear);
+}
+
+
 
 ?>
 
@@ -84,9 +91,10 @@ $row = mysqli_fetch_assoc($resultUser);
             <!-- Main content -->
             <section class="content">
                 <?php
-                $sql1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk";
-                $sql2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar";
-                $sql3 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal";
+
+                $sql1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
+                $sql2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
+                $sql3 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
                 $result1 = mysqli_query($conn, $sql1);
                 $result2 = mysqli_query($conn, $sql2);
                 $result3 = mysqli_query($conn, $sql3);
@@ -126,21 +134,22 @@ $row = mysqli_fetch_assoc($resultUser);
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-4">
-                                            <form action="">
+                                            <form action="" method="GET">
                                                 <div class="form-row">
                                                     <div class="col-4">
                                                         <div class="form-group">
                                                             <select class="form-control" name="src-year" id="src-year">
-                                                                <option>2023</option>
-                                                                <option>2022</option>
-                                                                <option>2021</option>
-                                                                <option>2020</option>
-                                                                <option>2019</option>
+                                                                <option <?= ($selectedYear == 2023) ? 'selected' : '' ?>>2023</option>
+                                                                <option <?= ($selectedYear == 2022) ? 'selected' : '' ?>>2022</option>
+                                                                <option <?= ($selectedYear == 2021) ? 'selected' : '' ?>>2021</option>
+                                                                <option <?= ($selectedYear == 2020) ? 'selected' : '' ?>>2020</option>
+                                                                <option <?= ($selectedYear == 2019) ? 'selected' : '' ?>>2019</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-2">
+                                                    <div class="col-6">
                                                         <button class="btn btn-danger">Cari</button>
+                                                        <a href="./" class="btn btn-outline-secondary"><i class="fas fa-sync-alt"></i></a>
                                                     </div>
                                                 </div>
                                             </form>
@@ -225,17 +234,57 @@ $row = mysqli_fetch_assoc($resultUser);
     <!-- AdminLTE for demo purposes -->
     <script src="../assets/dist/js/demo.js"></script>
 
+    <!-- Data Debet & Kredit By Month -->
+    <?php
+    $dataDebet = [];
+    $dataKredit = [];
+
+    for ($i = 1; $i <= 12; $i++) {
+        $sqlData1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
+        $sqlData2 =
+            "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
+        $sqlData3 =
+            "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
+        $resultData1 = mysqli_query($conn, $sqlData1);
+        $resultData2 = mysqli_query($conn, $sqlData2);
+        $resultData3 = mysqli_query($conn, $sqlData3);
+        $rowData1 = mysqli_fetch_assoc($resultData1);
+        $rowData2 = mysqli_fetch_assoc($resultData2);
+        $rowData3 = mysqli_fetch_assoc($resultData3);
+        $debet1 = intval($rowData1['Debet'] ?? 0);
+        $debet2 = intval($rowData2['Debet'] ?? 0);
+        $debet3 = intval($rowData3['Debet'] ?? 0);
+        $kredit1 = intval($rowData1['Kredit'] ?? 0);
+        $kredit2 = intval($rowData2['Kredit'] ?? 0);
+        $kredit3 = intval($rowData3['Kredit'] ?? 0);
+
+        $dataDebet[] = $debet1 + $debet2 + $debet3;
+        $dataKredit[] = $kredit1 + $kredit2 + $kredit3;
+    }
+
+    // echo "Debet --------------------- </br>";
+    // var_dump($dataDebet);
+    // echo "Kredit --------------------- </br>";
+    // var_dump($dataKredit);
+    ?>
+
+
     <script>
         $(function() {
             var namaBulanE = [
-                "January", "February", "March", "April", "May", "June",
-                "July"
+                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
             ];
 
             /* ChartJS
              * -------
              * Here we will create a few charts using ChartJS
              */
+
+            var dataDebet = <?php echo json_encode($dataDebet); ?>;
+            var dataKredit = <?php echo json_encode($dataKredit); ?>;
+
+            // console.log("Data Debet:", dataDebet);
+            // console.log("Data Kredit:", dataKredit);
 
             // BAR CHART DATA
             var barChartData = {
@@ -245,14 +294,14 @@ $row = mysqli_fetch_assoc($resultUser);
                         backgroundColor: '#2CAEFE',
                         borderColor: '#2CAEFE',
                         borderWidth: 1,
-                        data: [28, 48, 40, 19, 86, 27, 90]
+                        data: dataDebet
                     },
                     {
                         label: 'Pengeluaran Rp ',
                         backgroundColor: '#544FC5',
                         borderColor: '#544FC5',
                         borderWidth: 1,
-                        data: [28, 48, 40, 19, 86, 27, 90]
+                        data: dataKredit
                     }
                 ]
             };

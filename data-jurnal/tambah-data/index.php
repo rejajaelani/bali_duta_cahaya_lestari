@@ -172,7 +172,7 @@ $totalKredit = 0;
                                                 <select class="form-control" id="id-keterangan" name="id-keterangan" required>
                                                     <option style="display: none;"></option>
                                                     <?php
-                                                    $sql = "SELECT * FROM tb_keterangan";
+                                                    $sql = "SELECT * FROM tb_keterangan WHERE type_transaksi = 3";
                                                     $result = mysqli_query($conn, $sql);
                                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                                         <option value="<?= $row['id'] ?>"><?= $row['keterangan'] ?></option>

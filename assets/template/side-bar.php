@@ -33,7 +33,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-user" class="nav-link <?= ($name_page == 'Data User') ? 'active' : '' ?>">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-user" class="nav-link <?= ($name_page == 'Data User') ? 'active' : '' ?> <?= ($row['level'] == 3) ? 'd-none' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Data User</p>
                                     </a>
@@ -82,15 +82,21 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/neraca-saldo" class="nav-link">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/jurnal-umum" class="nav-link <?= ($name_page == 'Laporan Jurnal Umum') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Data Akun</p>
+                                        <p>Laporan Jurnal Umum</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/neraca-saldo" class="nav-link <?= ($name_page == 'Laporan Neraca Saldo') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Laporan Neraca Saldo</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/arus-kas" class="nav-link <?= ($name_page == 'Laporan Arus Kas') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Arus Kas</p>
                                     </a>
                                 </li>
                             </ul>
