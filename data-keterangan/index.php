@@ -102,8 +102,6 @@ $result = mysqli_query($conn, $sql);
                                     <th>Keterangan</th>
                                     <th>Type Keterangan</th>
                                     <th>Type Transaksi</th>
-                                    <th>Created At</th>
-                                    <th>Update At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -133,8 +131,6 @@ $result = mysqli_query($conn, $sql);
                                         } else {
                                             echo "<td>-</td>";
                                         }
-                                        echo "<td>" . $row['created_at'] . "</td>";
-                                        echo "<td>" . $row['update_at'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <div class="wrapper" style="display: flex;gap: 10px;">

@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "INSERT INTO tb_transaksi_masuk (id_transaksi_masuk, id_keterangan, tgl_trans_masuk, update_at) VALUES ('$id_transaksi', $id_keterangan, '$tgl', '$tgl_now')";
     $result = mysqli_query($conn, $sql);
+
     if (!$result) {
         $sqldel = "DELETE FROM tb_detail_trans_masuk WHERE id_transaksi_masuk = '$id_transaksi'";
         $resultdel = mysqli_query($conn, $sqldel);
@@ -35,10 +36,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    $_SESSION['msg'] = [
-        'key' => 'Data transaksi masuk berhasil ditambahkan',
-        'timestamp' => time()
-    ];
-    header("Location: ../data-transaksi/");
-    exit;
+    if ($result) {
+        $sqlJurnal = "INSERT INTO tb_jurnal (id_jurnal, id_keterangan, tgl_jurnal, update_at) VALUE ('$id_transaksi', $id_keterangan, '$tgl', '$tgl_now')";
+        $resultJurnal = mysqli_query($conn, $sqlJurnal);
+        if (!$resultJurnal) {
+            $sqlDelJurnal = "DELETE FROM tb_detail_jurnal WHERE id_jurnal = '$id_transaksi'";
+            $resultDelJurnal = mysqli_query($conn, $sqlDelJurnal);
+
+            if (!$resultDelJurnal) {
+                $_SESSION['msg-f'] = [
+                    'key' => 'Error : ' . mysqli_error($conn),
+                    'timestamp' => time()
+                ];
+                header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+                exit;
+            }
+
+            $_SESSION['msg-f'] = [
+                'key' => 'Data transaksi masuk gagal ditambahkan' . mysqli_error($conn),
+                'timestamp' => time()
+            ];
+            header("Location: ../data-transaksi/");
+            exit;
+        }
+        $_SESSION['msg'] = [
+            'key' => 'Data transaksi masuk berhasil ditambahkan',
+            'timestamp' => time()
+        ];
+        header("Location: ../data-transaksi/");
+        exit;
+    }
 }

@@ -16,8 +16,8 @@ $name_page = "Data Transaksi";
 $type_page = 1;
 
 // Inisialisasi variabel SQL
-$sql1 = "SELECT * FROM tb_transaksi_masuk tbtm INNER JOIN tb_keterangan tbk ON tbtm.id_keterangan = tbk.id";
-$sql2 = "SELECT * FROM tb_transaksi_keluar tbtk INNER JOIN tb_keterangan tbk ON tbtk.id_keterangan = tbk.id";
+$sql1 = "SELECT * FROM tb_transaksi_masuk ttm INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id INNER JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun ORDER BY tdtm.id DESC";
+$sql2 = "SELECT * FROM tb_transaksi_keluar ttk INNER JOIN tb_keterangan tbk ON ttk.id_keterangan = tbk.id INNER JOIN tb_detail_trans_keluar tdtk ON ttk.id_transaksi_keluar = tdtk.id_transaksi_keluar INNER JOIN tb_akun ta ON tdtk.id_akun = ta.id_akun ORDER BY tdtk.id DESC";
 $result_pemasukan = mysqli_query($conn, $sql1);
 $result_pengeluaran = mysqli_query($conn, $sql2);
 
@@ -101,8 +101,12 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Keterangan</th>
                                     <th>Tanggal</th>
+                                    <th>Keterangan</th>
+                                    <th>Kode Akun</th>
+                                    <th>Nama Akun</th>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -113,8 +117,12 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     while ($row = $result_pemasukan->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
-                                        echo "<td>" . $row['keterangan'] . "</td>";
                                         echo "<td>" . $row['tgl_trans_masuk'] . "</td>";
+                                        echo "<td>" . $row['keterangan'] . "</td>";
+                                        echo "<td>" . $row['id_akun'] . "</td>";
+                                        echo "<td>" . $row['nama'] . "</td>";
+                                        echo "<td>" . $row['debet'] . "</td>";
+                                        echo "<td>" . $row['kredit'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <div class="wrapper" style="display: flex;gap: 10px;">
@@ -156,8 +164,12 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Keterangan</th>
                                     <th>Tanggal</th>
+                                    <th>Keterangan</th>
+                                    <th>Kode Akun</th>
+                                    <th>Nama Akun</th>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -168,8 +180,12 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     while ($row = $result_pengeluaran->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
-                                        echo "<td>" . $row['keterangan'] . "</td>";
                                         echo "<td>" . $row['tgl_trans_keluar'] . "</td>";
+                                        echo "<td>" . $row['keterangan'] . "</td>";
+                                        echo "<td>" . $row['id_akun'] . "</td>";
+                                        echo "<td>" . $row['nama'] . "</td>";
+                                        echo "<td>" . $row['debet'] . "</td>";
+                                        echo "<td>" . $row['kredit'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <div class="wrapper" style="display: flex;gap: 10px;">

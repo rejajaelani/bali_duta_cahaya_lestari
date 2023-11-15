@@ -16,7 +16,7 @@ $name_page = "Data User";
 $type_page = 1;
 
 // Inisialisasi variabel SQL
-$sql = "SELECT * FROM tb_user";
+$sql = "SELECT * FROM tb_user ORDER BY id_user DESC";
 $result = mysqli_query($conn, $sql);
 
 ?>

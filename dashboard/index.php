@@ -94,16 +94,13 @@ if (isset($_GET['src-year'])) {
 
                 $sql1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
                 $sql2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
-                $sql3 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
                 $result1 = mysqli_query($conn, $sql1);
                 $result2 = mysqli_query($conn, $sql2);
-                $result3 = mysqli_query($conn, $sql3);
                 $row1 = mysqli_fetch_assoc($result1);
                 $row2 = mysqli_fetch_assoc($result2);
-                $row3 = mysqli_fetch_assoc($result3);
 
-                $totalPengeluaran = $row1['Kredit'] + $row2['Kredit'] + $row3['Kredit'];
-                $totalPemasukan = $row1['Debet'] + $row2['Debet'] + $row3['Debet'];
+                $totalPengeluaran = $row1['Kredit'] + $row2['Kredit'];
+                $totalPemasukan = $row1['Debet'] + $row2['Debet'];
                 ?>
                 <!-- Default box -->
                 <div class="card">
@@ -243,23 +240,17 @@ if (isset($_GET['src-year'])) {
         $sqlData1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
         $sqlData2 =
             "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
-        $sqlData3 =
-            "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_jurnal WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
         $resultData1 = mysqli_query($conn, $sqlData1);
         $resultData2 = mysqli_query($conn, $sqlData2);
-        $resultData3 = mysqli_query($conn, $sqlData3);
         $rowData1 = mysqli_fetch_assoc($resultData1);
         $rowData2 = mysqli_fetch_assoc($resultData2);
-        $rowData3 = mysqli_fetch_assoc($resultData3);
         $debet1 = intval($rowData1['Debet'] ?? 0);
         $debet2 = intval($rowData2['Debet'] ?? 0);
-        $debet3 = intval($rowData3['Debet'] ?? 0);
         $kredit1 = intval($rowData1['Kredit'] ?? 0);
         $kredit2 = intval($rowData2['Kredit'] ?? 0);
-        $kredit3 = intval($rowData3['Kredit'] ?? 0);
 
-        $dataDebet[] = $debet1 + $debet2 + $debet3;
-        $dataKredit[] = $kredit1 + $kredit2 + $kredit3;
+        $dataDebet[] = $debet1 + $debet2;
+        $dataKredit[] = $kredit1 + $kredit2;
     }
 
     // echo "Debet --------------------- </br>";

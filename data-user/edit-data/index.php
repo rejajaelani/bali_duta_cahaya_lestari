@@ -73,29 +73,27 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                 <label for="level">Level</label>
                                                 <select class="form-control" id="level" name="level" required>
                                                     <option style="display: none;"></option>
-                                                    <?php if ($_SESSION['dataUser']['level'] == 2) { ?>
-                                                        <option value="1">Admin</option>
-                                                    <?php } ?>
-                                                    <option value="2">Pimpinan</option>
-                                                    <option value="3">Akunting</option>
+                                                    <option <?= ($row['level'] == 1) ? 'selected' : '' ?> value="1">Admin</option>
+                                                    <option <?= ($row['level'] == 2) ? 'selected' : '' ?> value="2">Pimpinan</option>
+                                                    <option <?= ($row['level'] == 3) ? 'selected' : '' ?> value="3">Akunting</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="status">Status</label>
                                                 <select class="form-control" id="status" name="status" required>
                                                     <option style="display: none;"></option>
-                                                    <option value="1">Active</option>
-                                                    <option value="0">Non-Active</option>
+                                                    <option <?= ($row['status'] == 1) ? 'selected' : '' ?> value="1">Active</option>
+                                                    <option <?= ($row['status'] == 0) ? 'selected' : '' ?> value="0">Non-Active</option>
                                                 </select>
                                             </div>
                                             <!-- <div class="form-group">
                                                 <label for="password">Password</label>
                                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password...">
                                             </div> -->
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="foto">Foto</label>
                                                 <input type="file" class="form-control-file" id="foto" name="foto">
-                                            </div>
+                                            </div> -->
                                             <div class="row" style="width: max-content !important;">
                                                 <div class="col">
                                                     <button class="btn btn-success">Simpan</button>

@@ -14,11 +14,31 @@ include "../../function/delMsg.php";
 $name_page = "Laporan Neraca Saldo";
 $type_page = 2;
 
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+if (isset($_GET['src-year'])) {
+    $selectedYear = intval($_GET['src-year']);
+} else {
+    $selectedYear = intval($currentYear);
+}
+
+if (isset($_GET['src-month'])) {
+    $selectedMonth = intval($_GET['src-month']);
+} else {
+    $selectedMonth = intval($currentMonth);
+}
+
 // Inisialisasi variabel SQL
-$sql = "SELECT ta.*, SUM(tdtm.`debet`) AS Debet, SUM(tdtm.`kredit`) AS Kredit FROM tb_akun ta INNER JOIN tb_detail_trans_masuk tdtm ON ta.`id_akun` = tdtm.`id_akun` GROUP BY ta.`id_akun` ORDER BY ta.`id_akun` ASC";
-$sql2 = "SELECT ta.*, SUM(tdtm.`debet`) AS Debet, SUM(tdtm.`kredit`) AS Kredit FROM tb_akun ta INNER JOIN tb_detail_trans_keluar tdtm ON ta.`id_akun` = tdtm.`id_akun` GROUP BY ta.`id_akun` ORDER BY ta.`id_akun` ASC";
+$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.id_akun, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
+FROM tb_jurnal ttm 
+INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id 
+LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
+LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
+WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
+GROUP BY tdtm.id_akun
+ORDER BY tdtm.id";
 $result = mysqli_query($conn, $sql);
-$result2 = mysqli_query($conn, $sql2);
 
 ?>
 
@@ -90,12 +110,55 @@ $result2 = mysqli_query($conn, $sql2);
             <!-- Main content -->
             <section class="content">
                 <div class="card">
-                    <div class="card-header" style="background-color: #F2F2F2 !important;">
-                        <a href="./tambah-data/" class="btn btn-success btn-sm">Tambah Akun</a>
-                        <a href="./tambah-kategori/" class="btn btn-secondary btn-sm">Tambah Kategori</a>
-                    </div>
                     <div class="card-body">
-                        <h5 class="font-weight-bold" style="opacity: 0.2;">Neraca Saldo Pemasukan</h5>
+                        <div class="row">
+                            <div class="col-4">
+                                <form action="" method="GET">
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="src-year" id="src-year">
+                                                    <option <?= ($selectedYear == 2023) ? 'selected' : '' ?>>2023</option>
+                                                    <option <?= ($selectedYear == 2022) ? 'selected' : '' ?>>2022</option>
+                                                    <option <?= ($selectedYear == 2021) ? 'selected' : '' ?>>2021</option>
+                                                    <option <?= ($selectedYear == 2020) ? 'selected' : '' ?>>2020</option>
+                                                    <option <?= ($selectedYear == 2019) ? 'selected' : '' ?>>2019</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <select class="form-control" name="src-month" id="src-month">
+                                                    <option <?= ($selectedMonth == 1) ? 'selected' : '' ?> value="1">January</option>
+                                                    <option <?= ($selectedMonth == 2) ? 'selected' : '' ?> value="2">February</option>
+                                                    <option <?= ($selectedMonth == 3) ? 'selected' : '' ?> value="3">March</option>
+                                                    <option <?= ($selectedMonth == 4) ? 'selected' : '' ?> value="4">April</option>
+                                                    <option <?= ($selectedMonth == 5) ? 'selected' : '' ?> value="5">May</option>
+                                                    <option <?= ($selectedMonth == 6) ? 'selected' : '' ?> value="6">June</option>
+                                                    <option <?= ($selectedMonth == 7) ? 'selected' : '' ?> value="7">July</option>
+                                                    <option <?= ($selectedMonth == 8) ? 'selected' : '' ?> value="8">August</option>
+                                                    <option <?= ($selectedMonth == 9) ? 'selected' : '' ?> value="9">September</option>
+                                                    <option <?= ($selectedMonth == 10) ? 'selected' : '' ?> value="10">October</option>
+                                                    <option <?= ($selectedMonth == 11) ? 'selected' : '' ?> value="11">November</option>
+                                                    <option <?= ($selectedMonth == 12) ? 'selected' : '' ?> value="12">December</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <button class="btn btn-danger">Cari</button>
+                                            <a href="./" class="btn btn-outline-secondary"><i class="fas fa-sync-alt"></i></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-8">
+                                <form action="../../controller/print-neraca-saldo.php" target="_blank" method="POST">
+                                    <input type="hidden" name="print-year" id="print-year" value="<?= $selectedYear ?>">
+                                    <input type="hidden" name="print-month" id="print-month" value="<?= $selectedMonth ?>">
+                                    <button type="submit" class="btn btn-warning float-right"><i class="fas fa-print"></i></button>
+                                </form>
+                            </div>
+                        </div>
                         <table class="table table-bordered table-striped" style="font-size: 14px !important;">
                             <thead>
                                 <tr>
@@ -113,7 +176,7 @@ $result2 = mysqli_query($conn, $sql2);
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $row['id_akun'] . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
+                                        echo "<td>" . $row['Akun_Name'] . "</td>";
                                         echo "<td>" . $row['Debet'] . "</td>";
                                         echo "<td>" . $row['Kredit'] . "</td>";
                                         echo "</tr>";
@@ -128,45 +191,7 @@ $result2 = mysqli_query($conn, $sql2);
                                     </tr>
                                 <?php
                                 } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data akun.</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                        <h5 class="font-weight-bold mt-4" style="opacity: 0.2;">Neraca Saldo Pengeluaran</h5>
-                        <table class="table table-bordered table-striped" style="font-size: 14px !important;">
-                            <thead>
-                                <tr>
-                                    <th>No Akun</th>
-                                    <th>Nama Akun</th>
-                                    <th>Debet</th>
-                                    <th>Kredit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($result2->num_rows > 0) {
-                                    $jumDebet = 0;
-                                    $jumKredit = 0;
-                                    while ($row = $result2->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row['id_akun'] . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
-                                        echo "<td>" . $row['Debet'] . "</td>";
-                                        echo "<td>" . $row['Kredit'] . "</td>";
-                                        echo "</tr>";
-                                        $jumDebet += $row['Debet'];
-                                        $jumKredit += $row['Kredit'];
-                                    }
-                                ?>
-                                    <tr>
-                                        <td colspan="2" class="font-weight-bold">Jumlah</td>
-                                        <td><?= $jumDebet ?></td>
-                                        <td><?= $jumKredit ?></td>
-                                    </tr>
-                                <?php
-                                } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data akun.</td></tr>";
+                                    echo "<tr><td colspan='9'>Tidak ada data neraca saldo.</td></tr>";
                                 }
                                 ?>
                             </tbody>

@@ -113,6 +113,7 @@ $totalKredit = 0;
                                                         <form action="../../controller/delete-data-detail-trans-masuk.php" method="post">
                                                             <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
                                                             <input type="hidden" name="id" id="id" value="<?= $row['id'] ?>">
+                                                            <input type="hidden" name="type" id="type" value="2">
                                                             <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
                                                                 <i class="fas fa-times"></i>
                                                             </button>

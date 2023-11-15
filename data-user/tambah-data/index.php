@@ -72,10 +72,10 @@ $type_page = 2;
                                                 <option value="3">Akunting</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="foto">Foto</label>
                                             <input type="file" class="form-control-file" id="foto" name="foto" required>
-                                        </div>
+                                        </div> -->
                                         <div class="row" style="width: max-content !important;">
                                             <div class="col">
                                                 <button class="btn btn-success">Simpan</button>

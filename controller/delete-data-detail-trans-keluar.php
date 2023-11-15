@@ -8,7 +8,7 @@ $id_transaksi = mysqli_real_escape_string($conn, $_POST['id-transaksi']);
 $id = mysqli_real_escape_string($conn, $_POST['id']);
 $type = mysqli_escape_string($conn, $_POST['type']);
 
-$sql = "DELETE FROM tb_detail_trans_masuk WHERE id = '$id'";
+$sql = "DELETE FROM tb_detail_trans_keluar WHERE id = '$id'";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
@@ -17,10 +17,10 @@ if (!$result) {
         'timestamp' => time()
     ];
     if ($type == 1) {
-        header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+        header("Location: ../data-transaksi/tambah-data-pengeluaran/?id=$id_transaksi");
         exit;
     } else {
-        header("Location: ../data-transaksi/edit-data-pemasukan/?id=$id_transaksi");
+        header("Location: ../data-transaksi/edit-data-pengeluaran/?id=$id_transaksi");
         exit;
     }
 }
@@ -34,22 +34,22 @@ if ($result) {
             'timestamp' => time()
         ];
         if ($type == 1) {
-            header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+            header("Location: ../data-transaksi/tambah-data-pengeluaran/?id=$id_transaksi");
             exit;
         } else {
-            header("Location: ../data-transaksi/edit-data-pemasukan/?id=$id_transaksi");
+            header("Location: ../data-transaksi/edit-data-pengeluaran/?id=$id_transaksi");
             exit;
-        }
+        };
     }
     $_SESSION['msg'] = [
         'key' => 'Detail transaksi berhasil di delete',
         'timestamp' => time()
     ];
     if ($type == 1) {
-        header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+        header("Location: ../data-transaksi/tambah-data-pengeluaran/?id=$id_transaksi");
         exit;
     } else {
-        header("Location: ../data-transaksi/edit-data-pemasukan/?id=$id_transaksi");
+        header("Location: ../data-transaksi/edit-data-pengeluaran/?id=$id_transaksi");
         exit;
     }
 }

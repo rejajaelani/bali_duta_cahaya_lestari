@@ -30,7 +30,14 @@ if (isset($_GET['src-month'])) {
 }
 
 // Inisialisasi variabel SQL
-$sql = "SELECT * FROM tb_jurnal tbj INNER JOIN tb_keterangan tbk ON tbj.id_keterangan = tbk.id LEFT JOIN tb_detail_jurnal USING (id_jurnal) LEFT JOIN tb_akun USING (id_akun) WHERE YEAR(tbj.created_at) = $selectedYear AND MONTH(tbj.created_at) = $selectedMonth ORDER BY tbj.id_jurnal";
+$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
+FROM tb_jurnal ttm 
+INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id 
+LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
+LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
+WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
+GROUP BY Tanggal, tdtm.id_akun
+ORDER BY tdtm.id";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -174,25 +181,25 @@ $result = mysqli_query($conn, $sql);
                                     while ($row = $result->fetch_assoc()) {
                                         $no++;
                                         echo "<tr>";
-                                        if ($row['tgl_jurnal'] != $previousTanggalJurnal) {
+                                        if ($row['Tanggal'] != $previousTanggalJurnal) {
                                             // Hanya tampilkan tanggal jika tanggal_jurnal berbeda
-                                            echo "<td>" . $row['tgl_jurnal'] . "</td>";
+                                            echo "<td>" . $row['Tanggal'] . "</td>";
                                         } else {
                                             // Kosongkan kolom Tanggal jika tanggal_jurnal sama dengan sebelumnya
                                             echo "<td></td>";
                                         }
 
-                                        echo "<td>" . $row['nama'] . "</td>";
+                                        echo "<td>" . $row['Akun_Name'] . "</td>";
                                         echo "<td></td>";
-                                        echo "<td>" . $row['debet'] . "</td>";
-                                        echo "<td>" . $row['kredit'] . "</td>";
+                                        echo "<td>" . $row['Debet'] . "</td>";
+                                        echo "<td>" . $row['Kredit'] . "</td>";
                                         echo "</tr>";
 
                                         // Tambahkan nilai debet dan kredit pada total
-                                        $totalDebet += $row['debet'];
-                                        $totalKredit += $row['kredit'];
+                                        $totalDebet += $row['Debet'];
+                                        $totalKredit += $row['Kredit'];
 
-                                        $previousTanggalJurnal = $row['tgl_jurnal']; // Simpan tanggal_jurnal sebelumnya
+                                        $previousTanggalJurnal = $row['Tanggal']; // Simpan tanggal_jurnal sebelumnya
                                     }
 
                                     // Setelah loop, Anda dapat menampilkan total debet dan kredit di luar loop

@@ -27,13 +27,13 @@ if (isset($_POST['print-month'])) {
 $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
 
 // Inisialisasi variabel SQL
-$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
+$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.id_akun, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
 FROM tb_jurnal ttm 
 INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id 
 LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
 LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
 WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
-GROUP BY Tanggal, tdtm.id_akun
+GROUP BY tdtm.id_akun
 ORDER BY tdtm.id";
 $result = mysqli_query($conn, $sql);
 
@@ -70,15 +70,14 @@ $result = mysqli_query($conn, $sql);
     <div class="container">
         <div class="kop" style="text-align: center;">
             <h5 style="padding: 0 0 5px 0;margin: 0;">PT. Bali Duta Cahaya Lestari</h5>
-            <h5 style="padding: 0 0 5px 0;margin: 0;">Jurnal Umum</h5>
+            <h5 style="padding: 0 0 5px 0;margin: 0;">Neraca Saldo</h5>
             <h5 style="padding: 0 0 5px 0;margin: 0;">Priode <?= $namaBulan . " " . $selectedYear ?></h5>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th>Tanggal</th>
+                    <th>No Akun</th>
                     <th>Nama Akun</th>
-                    <th>Ref</th>
                     <th>Debet</th>
                     <th>Kredit</th>
                 </tr>
@@ -86,46 +85,27 @@ $result = mysqli_query($conn, $sql);
             <tbody>
                 <?php
                 if ($result->num_rows > 0) {
-                    $no = 0;
-                    $previousTanggalJurnal = null; // Inisialisasi variabel untuk melacak tanggal_jurnal sebelumnya
-
-                    $totalDebet = 0;
-                    $totalKredit = 0;
-
+                    $jumDebet = 0;
+                    $jumKredit = 0;
                     while ($row = $result->fetch_assoc()) {
-                        $no++;
                         echo "<tr>";
-                        if ($row['Tanggal'] != $previousTanggalJurnal) {
-                            // Hanya tampilkan tanggal jika tanggal_jurnal berbeda
-                            echo "<td>" . $row['Tanggal'] . "</td>";
-                        } else {
-                            // Kosongkan kolom Tanggal jika tanggal_jurnal sama dengan sebelumnya
-                            echo "<td></td>";
-                        }
-
+                        echo "<td>" . $row['id_akun'] . "</td>";
                         echo "<td>" . $row['Akun_Name'] . "</td>";
-                        echo "<td></td>";
                         echo "<td>" . $row['Debet'] . "</td>";
                         echo "<td>" . $row['Kredit'] . "</td>";
                         echo "</tr>";
-
-                        // Tambahkan nilai debet dan kredit pada total
-                        $totalDebet += $row['Debet'];
-                        $totalKredit += $row['Kredit'];
-
-                        $previousTanggalJurnal = $row['Tanggal']; // Simpan tanggal_jurnal sebelumnya
+                        $jumDebet += $row['Debet'];
+                        $jumKredit += $row['Kredit'];
                     }
-
-                    // Setelah loop, Anda dapat menampilkan total debet dan kredit di luar loop
-                    echo "<tr>";
-                    echo "<td colspan='3'>Total</td>";
-                    echo "<td>$totalDebet</td>";
-                    echo "<td>$totalKredit</td>";
-                    echo "</tr>";
+                ?>
+                    <tr>
+                        <td colspan="2" class="font-weight-bold">Jumlah</td>
+                        <td><?= $jumDebet ?></td>
+                        <td><?= $jumKredit ?></td>
+                    </tr>
+                <?php
                 } else {
-                    echo "<tr>
-                    <td colspan='9'>Tidak ada data jurnal.</td>
-                </tr>";
+                    echo "<tr><td colspan='9'>Tidak ada data neraca saldo.</td></tr>";
                 }
                 ?>
             </tbody>

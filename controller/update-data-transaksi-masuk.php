@@ -34,11 +34,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../data-transaksi/");
         exit;
     }
+    if ($result) {
+        $sqlJurnal = "UPDATE tb_jurnal SET tgl_jurnal = '$tgl', id_keterangan = $id_keterangan, update_at = '$tgl_now' WHERE id_jurnal = '$id_transaksi'";
+        $resultJurnal = mysqli_query($conn, $sqlJurnal);
+        if (!$resultJurnal) {
+            $sqlDelJurnal = "DELETE FROM tb_jurnal WHERE id_jurnal = '$id_transaksi'";
+            $resultDelJurnal = mysqli_query($conn, $sqlDelJurnal);
+            if (!$resultDelJurnal) {
+                $_SESSION['msg-f'] = [
+                    'key' => 'Error : ' . mysqli_error($conn),
+                    'timestamp' => time()
+                ];
+                header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+                exit;
+            }
 
-    $_SESSION['msg'] = [
-        'key' => 'Data transaksi masuk berhasil diupdate',
-        'timestamp' => time()
-    ];
-    header("Location: ../data-transaksi/");
-    exit;
+            $_SESSION['msg-f'] = [
+                'key' => 'Data transaksi masuk gagal diupdate' . mysqli_error($conn),
+                'timestamp' => time()
+            ];
+            header("Location: ../data-transaksi/");
+            exit;
+        }
+        $_SESSION['msg'] = [
+            'key' => 'Data transaksi masuk berhasil diupdate',
+            'timestamp' => time()
+        ];
+        header("Location: ../data-transaksi/");
+        exit;
+    }
 }

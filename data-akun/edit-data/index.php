@@ -13,47 +13,50 @@ if (!$result) {
     echo "Error : " . mysqli_error($conn);
 }
 
-while ($row = mysqli_fetch_assoc($result)) {
+
 
 ?>
 
-    <?php include "../../assets/template/header.php" ?>
+<?php include "../../assets/template/header.php" ?>
 
-    <body class="hold-transition sidebar-mini layout-fixed">
-        <div class="wrapper">
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
 
-            <?php include "../../assets/template/navbar.php" ?>
+        <?php include "../../assets/template/navbar.php" ?>
 
-            <?php include "../../assets/template/side-bar.php" ?>
+        <?php include "../../assets/template/side-bar.php" ?>
 
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6 col-lg-12">
-                                <h1 class="m-0">Edit Data Akun</h1>
-                            </div><!-- /.col -->
-                            <div class="col-sm-6 col-lg-12">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">Data Master</li>
-                                    <li class="breadcrumb-item"><a href="../">Data Akun</a></li>
-                                    <li class="breadcrumb-item active">Edit Data Akun</li>
-                                </ol>
-                            </div><!-- /.col -->
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6 col-lg-12">
+                            <h1 class="m-0">Edit Data Akun</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6 col-lg-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">Data Master</li>
+                                <li class="breadcrumb-item"><a href="../">Data Akun</a></li>
+                                <li class="breadcrumb-item active">Edit Data Akun</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
 
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <?php
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                    ?>
                                         <form action="../../controller/update-data-akun.php" method="post" enctype="multipart/form-data">
                                             <input type="hidden" name="level" id="level" value="2">
                                             <div class="form-group">
@@ -92,21 +95,22 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                 </div>
                                             </div>
                                         </form>
-                                    </div>
+                                    <?php } ?>
                                 </div>
-                                <!-- /.card -->
                             </div>
-                            <!-- /.col -->
+                            <!-- /.card -->
                         </div>
-                        <!-- /.row -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
 
-            </div>
         </div>
-    <?php } ?>
+    </div>
+
 
     <footer class="main-footer">
         <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
@@ -140,6 +144,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         });
     </script>
 
-    </body>
+</body>
 
-    </html>
+</html>
