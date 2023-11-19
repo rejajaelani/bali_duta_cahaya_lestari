@@ -16,8 +16,8 @@ $name_page = "Data Transaksi";
 $type_page = 1;
 
 // Inisialisasi variabel SQL
-$sql1 = "SELECT * FROM tb_transaksi_masuk ttm INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id INNER JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun ORDER BY tdtm.id DESC";
-$sql2 = "SELECT * FROM tb_transaksi_keluar ttk INNER JOIN tb_keterangan tbk ON ttk.id_keterangan = tbk.id INNER JOIN tb_detail_trans_keluar tdtk ON ttk.id_transaksi_keluar = tdtk.id_transaksi_keluar INNER JOIN tb_akun ta ON tdtk.id_akun = ta.id_akun ORDER BY tdtk.id DESC";
+$sql1 = "SELECT * FROM tb_transaksi_masuk ttm INNER JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun ORDER BY tdtm.id DESC";
+$sql2 = "SELECT * FROM tb_transaksi_keluar ttk INNER JOIN tb_detail_trans_keluar tdtk ON ttk.id_transaksi_keluar = tdtk.id_transaksi_keluar INNER JOIN tb_akun ta ON tdtk.id_akun = ta.id_akun ORDER BY tdtk.id DESC";
 $result_pemasukan = mysqli_query($conn, $sql1);
 $result_pengeluaran = mysqli_query($conn, $sql2);
 
@@ -134,7 +134,7 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                                     </a>
                                                     <form action="../controller/delete-data-transaksi.php" method="post">
                                                         <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_masuk'] ?>">
-                                                        <input type="hidden" name="type" id="type" value="1">
+                                                        <input type="hidden" name="type" id="type" value="2">
                                                         <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
                                                             <i class="fas fa-times"></i> Delete
                                                         </button>
@@ -193,18 +193,23 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                         echo "<td>" . $row['kredit'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
-                                            <div class="wrapper" style="display: flex;gap: 10px;">
-                                                <a href="edit-data-pengeluaran/?id=<?= $row['id_transaksi_keluar'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
-                                                    <i class="fas fa-pen"></i> Edit
-                                                </a>
-                                                <form action="../controller/delete-data-transaksi.php" method="post">
-                                                    <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>">
-                                                    <input type="hidden" name="type" id="type" value="2">
-                                                    <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                        <i class="fas fa-times"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            <?php if ($_SESSION['dataUser']['level'] == 1) { ?>
+                                                <p>-</p>
+                                            <?php } else { ?>
+                                                <div class="wrapper" style="display: flex;gap: 10px;">
+                                                    <a href="edit-data-pengeluaran/?id=<?= $row['id_transaksi_keluar'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
+                                                        <i class="fas fa-pen"></i> Edit
+                                                    </a>
+                                                    <form action="../controller/delete-data-transaksi.php" method="post">
+                                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>">
+                                                        <input type="hidden" name="type" id="type" value="2">
+                                                        <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
+                                                            <i class="fas fa-times"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                            <?php } ?>
                                         </td>
                                 <?php
                                         $no++; // Tingkatkan nomor baris setiap kali iterasi

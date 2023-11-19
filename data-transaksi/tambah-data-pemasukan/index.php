@@ -72,6 +72,47 @@ $totalKredit = 0;
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
+                                    <form id="simpanForm" action="../../controller/input-data-transaksi-masuk.php" method="post" class="mb-2 mt-4">
+                                        <div class="form-group row">
+                                            <label for="id-transaksi" class="col-sm-2 col-form-label">Id Transaksi</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="id-transaksi" name="id-transaksi" value="<?= $id_transaksi ?>" readonly required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="date" class="col-sm-2 col-form-label">Tanggal</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" id="date" name="date" onchange="setTanggalCache()" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="keterangan" class="col-sm-2 col-form-label">Keterangan</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="keterangan" name="keterangan" onkeyup="setKeteranganCache()" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="type-transaksi" class="col-sm-2 col-form-label">Type Transaksi</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" id="type-transaksi" name="type-transaksi" onchange="setTypeTransaksiCache()" required>
+                                                    <option value="4">-</option>
+                                                    <option value="1">Operasional</option>
+                                                    <option value="2">Investasi</option>
+                                                    <option value="3">Pendanaan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group row">
+                                            <label for="bukti" class="col-sm-2 col-form-label">Bukti Transaksi</label>
+                                            <div class="col-sm-10">
+                                                <input type="file" class="form-control-file border p-2 rounded" id="bukti" name="bukti">
+                                            </div>
+                                        </div> -->
+                                        <div class="w-100 d-flex justify-content-end mb-4">
+                                            <a id="btn-discard" href="../../controller/discard-transaksi.php?id=<?= $id_transaksi ?>&type=1" class="btn btn-danger btn-sm mr-2 d-none">Discard Transaksi</a>
+                                            <button class="btn btn-success btn-sm d-none" id="simpanButton">+ Tambah Transaksi</button>
+                                        </div>
+                                    </form>
                                     <form id="tambahForm" action="../../controller/input-data-detail-trans-masuk.php" method="post">
                                         <input type="hidden" name="type" value="1">
                                         <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
@@ -154,44 +195,9 @@ $totalKredit = 0;
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <form id="simpanForm" action="../../controller/input-data-transaksi-masuk.php" method="post" class="mb-2 mt-4">
-                                        <div class="form-group row">
-                                            <label for="id-transaksi" class="col-sm-2 col-form-label">Id Transaksi</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="id-transaksi" name="id-transaksi" value="<?= $id_transaksi ?>" readonly required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="date" class="col-sm-2 col-form-label">Tanggal</label>
-                                            <div class="col-sm-10">
-                                                <input type="date" class="form-control" id="date" name="date" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id-keterangan" class="col-sm-2 col-form-label">Keterangan</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" id="id-keterangan" name="id-keterangan" required>
-                                                    <option style="display: none;"></option>
-                                                    <?php
-                                                    $sql = "SELECT * FROM tb_keterangan WHERE type_transaksi = 1";
-                                                    $result = mysqli_query($conn, $sql);
-                                                    while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                        <option value="<?= $row['id'] ?>"><?= $row['keterangan'] ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="form-group row">
-                                            <label for="bukti" class="col-sm-2 col-form-label">Bukti Transaksi</label>
-                                            <div class="col-sm-10">
-                                                <input type="file" class="form-control-file border p-2 rounded" id="bukti" name="bukti">
-                                            </div>
-                                        </div> -->
-                                        <div class="w-100 d-flex justify-content-end mb-4">
-                                            <a href="../../controller/discard-transaksi.php?id=<?= $id_transaksi ?>&type=1" class="btn btn-danger btn-sm mr-2">Discard Transaksi</a>
-                                            <button class="btn btn-success btn-sm" id="simpanButton">+ Tambah Transaksi</button>
-                                        </div>
-                                    </form>
+
+                                    <button id="klik2" type="button" class="btn btn-success btn-sm float-right mt-3">+ Tambah Transaksi</button>
+                                    <button id="klik1" type="button" class="btn btn-danger btn-sm mr-2 float-right mt-3">Discard Transaksi</button>
                                 </div>
                             </div>
                             <!-- /.card -->
@@ -205,6 +211,51 @@ $totalKredit = 0;
             <!-- /.content -->
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let cachedDate = localStorage.getItem('cacheTanggal');
+            let cachedKeterangan = localStorage.getItem('cacheKeterangan');
+            let cachedTypeTransaksi = localStorage.getItem('cacheTypeTransaksi');
+            if (cachedDate) {
+                document.getElementById('date').value = cachedDate;
+            }
+            if (cachedKeterangan) {
+                document.getElementById('keterangan').value = cachedKeterangan;
+            }
+            if (cachedTypeTransaksi) {
+                document.getElementById('type-transaksi').value = cachedTypeTransaksi;
+            }
+        });
+
+        function setTanggalCache() {
+            let tgl = document.getElementById("date").value;
+            localStorage.setItem('cacheTanggal', tgl);
+        }
+
+        function setKeteranganCache() {
+            let ket = document.getElementById("keterangan").value;
+            localStorage.setItem('cacheKeterangan', ket);
+        }
+
+        function setTypeTransaksiCache() {
+            let type = document.getElementById("type-transaksi").value;
+            localStorage.setItem('cacheTypeTransaksi', type);
+        }
+
+        const btnKlik1 = document.getElementById("klik1");
+        const btnKlik2 = document.getElementById("klik2");
+        const btnDiscard = document.getElementById("btn-discard");
+        const btnSimpan = document.getElementById("simpanButton");
+        btnKlik1.addEventListener("click", function() {
+            localStorage.clear();
+            btnDiscard.click();
+        });
+        btnKlik2.addEventListener("click", function() {
+            localStorage.clear();
+            btnSimpan.click();
+        });
+    </script>
 
     <footer class="main-footer">
         <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>

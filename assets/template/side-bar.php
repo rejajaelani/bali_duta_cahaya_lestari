@@ -48,13 +48,6 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-keterangan" class="nav-link <?= ($name_page == 'Data Keterangan') ? 'active' : '' ?>">
-                                <i class="fas fa-sticky-note nav-icon"></i>
-                                <p>Data Keterangan</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-transaksi" class="nav-link <?= ($name_page == 'Data Transaksi') ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>
@@ -63,7 +56,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item <?= ($name_page == 'Laporan Neraca Saldo' || $name_page == 'Laporan Jurnal Umum' || $name_page == 'Laporan Arus Kas') ? 'menu-is-opening menu-open' : '' ?>">
+                        <li class="nav-item <?= ($name_page == 'Laporan Neraca Saldo' || $name_page == 'Laporan Jurnal Umum' || $name_page == 'Laporan Arus Kas' || $name_page == 'Laporan Laba Rugi' || $name_page == 'Laporan Perubahan Modal') ? 'menu-is-opening menu-open' : '' ?>">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -88,6 +81,18 @@
                                     <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/arus-kas" class="nav-link <?= ($name_page == 'Laporan Arus Kas') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Laporan Arus Kas</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/laba-rugi" class="nav-link <?= ($name_page == 'Laporan Laba Rugi') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Laba Rugi</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>laporan/perubahan-modal" class="nav-link <?= ($name_page == 'Laporan Perubahan Modal') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Laporan Perubahan Modal</p>
                                     </a>
                                 </li>
                             </ul>

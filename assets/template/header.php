@@ -20,4 +20,5 @@ $row = mysqli_fetch_assoc($resultUser);
 
     <link rel="stylesheet" href="<?= ($type_page == 1) ? '../' : '../../' ?>css/style.css">
     <link rel="stylesheet" href="<?= ($type_page == 1) ? '../' : '../../' ?>assets/css/dataTables.bootstrap4.min.css">
+
 </head>

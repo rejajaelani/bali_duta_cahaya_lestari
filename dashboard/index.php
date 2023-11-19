@@ -99,8 +99,8 @@ if (isset($_GET['src-year'])) {
                 $row1 = mysqli_fetch_assoc($result1);
                 $row2 = mysqli_fetch_assoc($result2);
 
-                $totalPengeluaran = $row1['Kredit'] + $row2['Kredit'];
-                $totalPemasukan = $row1['Debet'] + $row2['Debet'];
+                $totalPengeluaran = $row2['Debet'] + $row2['Kredit'];
+                $totalPemasukan = $row1['Debet'] + $row1['Kredit'];
                 ?>
                 <!-- Default box -->
                 <div class="card">
@@ -238,8 +238,7 @@ if (isset($_GET['src-year'])) {
 
     for ($i = 1; $i <= 12; $i++) {
         $sqlData1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
-        $sqlData2 =
-            "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
+        $sqlData2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
         $resultData1 = mysqli_query($conn, $sqlData1);
         $resultData2 = mysqli_query($conn, $sqlData2);
         $rowData1 = mysqli_fetch_assoc($resultData1);
@@ -249,8 +248,8 @@ if (isset($_GET['src-year'])) {
         $kredit1 = intval($rowData1['Kredit'] ?? 0);
         $kredit2 = intval($rowData2['Kredit'] ?? 0);
 
-        $dataDebet[] = $debet1 + $debet2;
-        $dataKredit[] = $kredit1 + $kredit2;
+        $dataDebet[] = $debet1 + $kredit1;
+        $dataKredit[] = $debet2 + $kredit2;
     }
 
     // echo "Debet --------------------- </br>";

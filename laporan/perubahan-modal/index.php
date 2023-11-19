@@ -11,7 +11,7 @@ if (isset($_SESSION['isLogin']) != true) {
 
 include "../../function/delMsg.php";
 
-$name_page = "Laporan Jurnal Umum";
+$name_page = "Laporan Perubahan Modal";
 $type_page = 2;
 
 $currentMonth = date('m');
@@ -30,14 +30,31 @@ if (isset($_GET['src-month'])) {
 }
 
 // Inisialisasi variabel SQL
-$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
-FROM tb_jurnal ttm  
-LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
-LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
-WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
-GROUP BY Tanggal, tdtm.id_akun
-ORDER BY tdtm.id";
-$result = mysqli_query($conn, $sql);
+$sql1 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+WHERE ta.nama LIKE '%Pendapatan%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+GROUP BY Keterangan_Name
+ORDER BY tdj.created_at ASC";
+$sql2 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+WHERE ta.nama LIKE '%Beban%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+GROUP BY Keterangan_Name";
+$sql3 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+WHERE ta.nama LIKE '%Modal%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+GROUP BY Keterangan_Name";
+$sql4 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+WHERE ta.nama LIKE '%Prive%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+GROUP BY Keterangan_Name";
+$result1 = mysqli_query($conn, $sql1);
+$result2 = mysqli_query($conn, $sql2);
+$result3 = mysqli_query($conn, $sql3);
+$result4 = mysqli_query($conn, $sql4);
 
 ?>
 
@@ -94,12 +111,12 @@ $result = mysqli_query($conn, $sql);
                             </div>
                         <?php } ?>
                         <div class="col-12">
-                            <h1>Laporan Jurnal Umum</h1>
+                            <h1>Laporan Perubahan Modal</h1>
                         </div>
                         <div class="col-12">
                             <ol class="breadcrumb float-left">
                                 <li class="breadcrumb-item">Laporan</li>
-                                <li class="breadcrumb-item"><a href="./">Laporan Jurnal Umum</a></li>
+                                <li class="breadcrumb-item"><a href="./">Laporan Perubahan Modal</a></li>
                             </ol>
                         </div>
                     </div>
@@ -151,7 +168,7 @@ $result = mysqli_query($conn, $sql);
                                 </form>
                             </div>
                             <div class="col-8">
-                                <form action="../../controller/print-jurnal.php" target="_blank" method="POST">
+                                <form action="../../controller/print-perubahan-modal.php" target="_blank" method="POST">
                                     <input type="hidden" name="print-year" id="print-year" value="<?= $selectedYear ?>">
                                     <input type="hidden" name="print-month" id="print-month" value="<?= $selectedMonth ?>">
                                     <button type="submit" class="btn btn-warning float-right"><i class="fas fa-print"></i></button>
@@ -159,59 +176,56 @@ $result = mysqli_query($conn, $sql);
                             </div>
                         </div>
                         <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
-                            <thead>
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Nama Akun</th>
-                                    <th>Ref</th>
-                                    <th>Debet</th>
-                                    <th>Kredit</th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <?php
-                                if ($result->num_rows > 0) {
-                                    $no = 0;
-                                    $previousTanggalJurnal = null; // Inisialisasi variabel untuk melacak tanggal_jurnal sebelumnya
-
-                                    $totalDebet = 0;
-                                    $totalKredit = 0;
-
-                                    while ($row = $result->fetch_assoc()) {
-                                        $no++;
-                                        echo "<tr>";
-                                        if ($row['Tanggal'] != $previousTanggalJurnal) {
-                                            // Hanya tampilkan tanggal jika tanggal_jurnal berbeda
-                                            echo "<td>" . $row['Tanggal'] . "</td>";
-                                        } else {
-                                            // Kosongkan kolom Tanggal jika tanggal_jurnal sama dengan sebelumnya
-                                            echo "<td></td>";
-                                        }
-
-                                        echo "<td>" . $row['Akun_Name'] . "</td>";
-                                        echo "<td></td>";
-                                        echo "<td>" . $row['Debet'] . "</td>";
-                                        echo "<td>" . $row['Kredit'] . "</td>";
-                                        echo "</tr>";
-
-                                        // Tambahkan nilai debet dan kredit pada total
-                                        $totalDebet += $row['Debet'];
-                                        $totalKredit += $row['Kredit'];
-
-                                        $previousTanggalJurnal = $row['Tanggal']; // Simpan tanggal_jurnal sebelumnya
-                                    }
-
-                                    // Setelah loop, Anda dapat menampilkan total debet dan kredit di luar loop
-                                    echo "<tr>";
-                                    echo "<td colspan='3'>Total</td>";
-                                    echo "<td>$totalDebet</td>";
-                                    echo "<td>$totalKredit</td>";
-                                    echo "</tr>";
-                                } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data jurnal.</td></tr>";
+                                $modalAwal = 0;
+                                while ($row = mysqli_fetch_assoc($result3)) { ?>
+                                    <tr>
+                                        <td><?= $row['Keterangan_Name'] ?> (Awal)</td>
+                                        <td><?= $row['Jumlah'] ?></td>
+                                    </tr>
+                                <?php
+                                    $modalAwal += $row['Jumlah'];
                                 }
-
                                 ?>
+                                <?php
+                                $totalPendapatan = 0;
+                                while ($row = mysqli_fetch_assoc($result1)) {
+                                    $totalPendapatan += $row['Jumlah'];
+                                }
+                                $totalBeban = 0;
+                                while ($row = mysqli_fetch_assoc($result2)) {
+                                    $totalBeban += $row['Jumlah'];
+                                }
+                                $totalModalAwal = $modalAwal + ($totalPendapatan - $totalBeban)
+                                ?>
+                                <tr>
+                                    <td>Laba Bersih</td>
+                                    <td><?= $totalPendapatan - $totalBeban ?></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="border-top: 2px solid black;"><?= $totalModalAwal ?></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <?php
+                                $prive = 0;
+                                while ($row = mysqli_fetch_assoc($result4)) { ?>
+                                    <tr>
+                                        <td><?= $row['Keterangan_Name'] ?></td>
+                                        <td><?= $row['Jumlah'] ?></td>
+                                    </tr>
+                                <?php
+                                    $prive += $row['Jumlah'];
+                                }
+                                ?>
+                                <tr>
+                                    <td>Modal Akhir</td>
+                                    <td><?= $totalModalAwal - $prive ?></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

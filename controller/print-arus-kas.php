@@ -70,16 +70,16 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE tk.type_keterangan = 1 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
+                $sql = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE ttm.type_transaksi = 1 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result = mysqli_query($conn, $sql);
-                $sql2 = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtk.debet) AS debet, SUM(tdtk.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_keluar tdtk ON ttm.id_transaksi_keluar = tdtk.id_transaksi_keluar WHERE tk.type_keterangan = 1 AND YEAR(tdtk.created_at) = $selectedYear AND MONTH(tdtk.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m')";
+                $sql2 = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_detail_trans_keluar tdtm ON ttm.id_transaksi_keluar = tdtm.id_transaksi_keluar WHERE ttm.type_transaksi = 1 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result2 = mysqli_query($conn, $sql2);
                 if ($result->num_rows > 0 || $result2->num_rows > 0) {
                     $total = 0;
                     $nilai = 0;
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        if ($row['id_keterangan'] == $row['id_keterangan']) {
+                        if ($row['keterangan'] == $row['keterangan']) {
                         }
                         echo "<td>" . $row['keterangan'] . "</td>";
                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
@@ -130,16 +130,16 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE tk.type_keterangan = 2 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
+                $sql = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE ttm.type_transaksi = 2 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result = mysqli_query($conn, $sql);
-                $sql2 = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtk.debet) AS debet, SUM(tdtk.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_keluar tdtk ON ttm.id_transaksi_keluar = tdtk.id_transaksi_keluar WHERE tk.type_keterangan = 2 AND YEAR(tdtk.created_at) = $selectedYear AND MONTH(tdtk.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m')";
+                $sql2 = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_detail_trans_keluar tdtm ON ttm.id_transaksi_keluar = tdtm.id_transaksi_keluar WHERE ttm.type_transaksi = 2 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result2 = mysqli_query($conn, $sql2);
                 if ($result->num_rows > 0 || $result2->num_rows > 0) {
                     $total = 0;
                     $nilai = 0;
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        if ($row['id_keterangan'] == $row['id_keterangan']) {
+                        if ($row['keterangan'] == $row['keterangan']) {
                         }
                         echo "<td>" . $row['keterangan'] . "</td>";
                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
@@ -190,16 +190,76 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE tk.type_keterangan = 3 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
+                $sql = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE ttm.type_transaksi = 3 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result = mysqli_query($conn, $sql);
-                $sql2 = "SELECT tk.id AS id_keterangan, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtk.debet) AS debet, SUM(tdtk.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_keterangan tk ON ttm.id_keterangan = tk.id JOIN tb_detail_trans_keluar tdtk ON ttm.id_transaksi_keluar = tdtk.id_transaksi_keluar WHERE tk.type_keterangan = 3 AND YEAR(tdtk.created_at) = $selectedYear AND MONTH(tdtk.created_at) = $selectedMonth GROUP BY tk.id, tk.keterangan, DATE_FORMAT(tdtk.created_at, '%Y-%m')";
+                $sql2 = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_detail_trans_keluar tdtm ON ttm.id_transaksi_keluar = tdtm.id_transaksi_keluar WHERE ttm.type_transaksi = 3 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
                 $result2 = mysqli_query($conn, $sql2);
                 if ($result->num_rows > 0 || $result2->num_rows > 0) {
                     $total = 0;
                     $nilai = 0;
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        if ($row['id_keterangan'] == $row['id_keterangan']) {
+                        if ($row['keterangan'] == $row['keterangan']) {
+                        }
+                        echo "<td>" . $row['keterangan'] . "</td>";
+                        if ($row['debet'] != 0 && $row['kredit'] == 0) {
+                            echo "<td>Rp. " . $row['debet'] . "</td>";
+                            $nilai = $row['debet'];
+                        } elseif ($row['kredit'] != 0 && $row['debet'] == 0) {
+                            echo "<td>(Rp. " . $row['kredit'] . ")</td>";
+                            $nilai = -$row['kredit'];
+                        } elseif ($row['debet'] != 0 && $row['kredit'] != 0) {
+                            $nilai = $row['debet'] - $row['kredit'];
+                            echo "<td>Rp. " . $nilai . "</td>";
+                        }
+                        echo "</tr>";
+                        $total += $nilai;
+                    }
+                    while ($row2 = $result2->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row2['keterangan'] . "</td>";
+                        if ($row2['debet'] != 0 && $row2['kredit'] == 0) {
+                            echo "<td>Rp. " . $row2['debet'] . "</td>";
+                            $nilai = $row2['debet'];
+                        } elseif ($row2['kredit'] != 0 && $row2['debet'] == 0) {
+                            echo "<td>(Rp. " . $row2['kredit'] . ")</td>";
+                            $nilai = -$row2['kredit'];
+                        } elseif ($row2['debet'] != 0 && $row2['kredit'] != 0) {
+                            $nilai = $row2['debet'] - $row2['kredit'];
+                            echo "<td>Rp. " . $nilai . "</td>";
+                        }
+                        echo "</tr>";
+                        $total += $nilai;
+                    }
+                    echo "<tr>";
+                    echo "<td>Total</td>";
+                    echo "<td>Rp. " . $total . "</td>";
+                    echo "</tr>";
+                } else {
+                    echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
+                }
+
+                ?>
+            </tbody>
+        </table>
+        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
+            <thead>
+                <tr>
+                    <th colspan="2">Arus Kas dari Aktifitas Lainnya</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_masuk ttm JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk WHERE ttm.type_transaksi = 4 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
+                $result = mysqli_query($conn, $sql);
+                $sql2 = "SELECT ttm.`keterangan`, DATE_FORMAT(tdtm.created_at, '%Y-%m') AS bulan_transaksi, SUM(tdtm.debet) AS debet, SUM(tdtm.kredit) AS kredit FROM tb_transaksi_keluar ttm JOIN tb_detail_trans_keluar tdtm ON ttm.id_transaksi_keluar = tdtm.id_transaksi_keluar WHERE ttm.type_transaksi = 4 AND YEAR(tdtm.created_at) = $selectedYear AND MONTH(tdtm.created_at) = $selectedMonth GROUP BY ttm.type_transaksi, DATE_FORMAT(tdtm.created_at, '%Y-%m')";
+                $result2 = mysqli_query($conn, $sql2);
+                if ($result->num_rows > 0 || $result2->num_rows > 0) {
+                    $total = 0;
+                    $nilai = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        if ($row['keterangan'] == $row['keterangan']) {
                         }
                         echo "<td>" . $row['keterangan'] . "</td>";
                         if ($row['debet'] != 0 && $row['kredit'] == 0) {

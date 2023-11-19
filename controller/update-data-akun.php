@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result_cek = mysqli_query($conn, $sql_cek);
 
         if ($result_cek->num_rows > 0) {
-            $sql = "UPDATE tb_akun SET id_akun = '$id_akun', nama = '$nama_akun', id_kategori_akun = $kategori_akun, sifat = '$sifat_akun'";
+            $sql = "UPDATE tb_akun SET nama = '$nama_akun', id_kategori_akun = $kategori_akun, sifat = '$sifat_akun' WHERE id_akun = '$id_akun'";
             if (mysqli_query($conn, $sql)) {
                 $_SESSION['msg'] = [
                     'key' => 'Data akun berhasil diupdate',

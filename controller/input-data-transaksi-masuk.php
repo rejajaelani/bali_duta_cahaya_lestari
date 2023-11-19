@@ -10,9 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id_transaksi = mysqli_escape_string($conn, $_POST['id-transaksi']);
     $tgl = mysqli_escape_string($conn, $_POST['date']);
-    $id_keterangan = intval(mysqli_escape_string($conn, $_POST['id-keterangan']));
+    $keterangan = mysqli_escape_string($conn, $_POST['keterangan']);
+    $type_transaksi = mysqli_escape_string($conn, $_POST['type-transaksi']);
 
-    $sql = "INSERT INTO tb_transaksi_masuk (id_transaksi_masuk, id_keterangan, tgl_trans_masuk, update_at) VALUES ('$id_transaksi', $id_keterangan, '$tgl', '$tgl_now')";
+    $sql = "INSERT INTO tb_transaksi_masuk (id_transaksi_masuk, keterangan, type_transaksi, tgl_trans_masuk, update_at) VALUES ('$id_transaksi', '$keterangan', $type_transaksi, '$tgl', '$tgl_now')";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
@@ -37,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($result) {
-        $sqlJurnal = "INSERT INTO tb_jurnal (id_jurnal, id_keterangan, tgl_jurnal, update_at) VALUE ('$id_transaksi', $id_keterangan, '$tgl', '$tgl_now')";
+        $sqlJurnal = "INSERT INTO tb_jurnal (id_jurnal, keterangan, type_transaksi, tgl_jurnal, update_at) VALUE ('$id_transaksi', '$keterangan', $type_transaksi, '$tgl', '$tgl_now')";
         $resultJurnal = mysqli_query($conn, $sqlJurnal);
         if (!$resultJurnal) {
             $sqlDelJurnal = "DELETE FROM tb_detail_jurnal WHERE id_jurnal = '$id_transaksi'";

@@ -31,8 +31,7 @@ if (isset($_GET['src-month'])) {
 
 // Inisialisasi variabel SQL
 $sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.id_akun, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
-FROM tb_jurnal ttm 
-INNER JOIN tb_keterangan tbk ON ttm.id_keterangan = tbk.id 
+FROM tb_jurnal ttm  
 LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
 LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
 WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
