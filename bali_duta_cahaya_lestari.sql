@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2023 at 07:31 PM
+-- Generation Time: Nov 19, 2023 at 05:01 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.24
 
@@ -41,15 +41,8 @@ CREATE TABLE `tb_akun` (
 --
 
 INSERT INTO `tb_akun` (`id_akun`, `nama`, `id_kategori_akun`, `sifat`, `created_at`, `update_at`) VALUES
-('101', 'Kas', 5, 'Debet', '2023-11-07 23:15:01', '2023-11-07 23:15:01'),
-('103', 'Piutang Dagang', 5, 'Debet', '2023-11-07 23:15:32', '2023-11-07 23:15:32'),
-('104', 'Persediaan Barang Dagang', 5, 'Debet', '2023-11-07 23:16:02', '2023-11-07 23:16:02'),
-('203', 'Hutang Dagang', 5, 'Kredit', '2023-11-07 23:16:24', '2023-11-07 23:16:24'),
-('222', 'Modal PT', 5, 'Kredit', '2023-11-07 23:16:53', '2023-11-07 23:16:53'),
-('324', 'Prive PT', 5, 'Debet', '2023-11-07 23:17:17', '2023-11-07 23:17:17'),
-('401', 'Penjualan', 5, 'Kredit', '2023-11-07 23:17:37', '2023-11-07 23:17:37'),
-('402', 'Return Penjualan', 5, 'Debet', '2023-11-07 23:18:02', '2023-11-07 23:18:02'),
-('404', 'Potongan Penjualan', 5, 'Debet', '2023-11-07 23:18:29', '2023-11-07 23:18:29');
+('101', 'Modal', 5, 'Kredit', '2023-11-19 22:08:40', '2023-11-19 22:08:40'),
+('102', 'Prive', 5, 'Debit', '2023-11-19 23:15:46', '2023-11-19 23:15:46');
 
 -- --------------------------------------------------------
 
@@ -94,9 +87,8 @@ CREATE TABLE `tb_detail_jurnal` (
 --
 
 INSERT INTO `tb_detail_jurnal` (`id`, `id_jurnal`, `id_akun`, `debet`, `kredit`, `created_at`, `update_at`) VALUES
-('PK-656622', 'TRX-202311151909410001', '101', 1000000, 0, '2023-11-16 02:09:47', '2023-11-16 02:09:47'),
-('PM-218392', 'TRX-202311151909540001', '103', 1000000, 0, '2023-11-16 02:10:00', '2023-11-16 02:10:00'),
-('PM-592467', 'TRX-202311151909260001', '101', 1000000, 0, '2023-11-16 02:09:33', '2023-11-16 02:09:33');
+('PK-969658', 'TRX-202311191617130001', '102', 1000000, 0, '2023-11-19 23:17:30', '2023-11-19 23:17:30'),
+('PM-666057', 'TRX-202311191609240001', '101', 10000000, 0, '2023-11-19 23:09:50', '2023-11-19 23:09:50');
 
 -- --------------------------------------------------------
 
@@ -119,7 +111,7 @@ CREATE TABLE `tb_detail_trans_keluar` (
 --
 
 INSERT INTO `tb_detail_trans_keluar` (`id`, `id_transaksi_keluar`, `id_akun`, `debet`, `kredit`, `created_at`, `update_at`) VALUES
-('PK-656622', 'TRX-202311151909410001', '101', 1000000, 0, '2023-11-16 02:09:47', '2023-11-16 02:09:47');
+('PK-969658', 'TRX-202311191617130001', '102', 1000000, 0, '2023-11-19 23:17:30', '2023-11-19 23:17:30');
 
 -- --------------------------------------------------------
 
@@ -142,8 +134,7 @@ CREATE TABLE `tb_detail_trans_masuk` (
 --
 
 INSERT INTO `tb_detail_trans_masuk` (`id`, `id_transaksi_masuk`, `id_akun`, `debet`, `kredit`, `created_at`, `update_at`) VALUES
-('PM-218392', 'TRX-202311151909540001', '103', 1000000, 0, '2023-11-16 02:10:00', '2023-11-16 02:10:00'),
-('PM-592467', 'TRX-202311151909260001', '101', 1000000, 0, '2023-11-16 02:09:33', '2023-11-16 02:09:33');
+('PM-666057', 'TRX-202311191609240001', '101', 10000000, 0, '2023-11-19 23:09:50', '2023-11-19 23:09:50');
 
 -- --------------------------------------------------------
 
@@ -153,7 +144,8 @@ INSERT INTO `tb_detail_trans_masuk` (`id`, `id_transaksi_masuk`, `id_akun`, `deb
 
 CREATE TABLE `tb_jurnal` (
   `id_jurnal` varchar(255) NOT NULL,
-  `id_keterangan` int(11) NOT NULL,
+  `keterangan` varchar(255) NOT NULL,
+  `type_transaksi` int(11) NOT NULL,
   `tgl_jurnal` date NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
@@ -163,10 +155,9 @@ CREATE TABLE `tb_jurnal` (
 -- Dumping data for table `tb_jurnal`
 --
 
-INSERT INTO `tb_jurnal` (`id_jurnal`, `id_keterangan`, `tgl_jurnal`, `created_at`, `update_at`) VALUES
-('TRX-202311151909260001', 3, '2023-11-16', '2023-11-16 02:09:38', '2023-11-16 02:09:38'),
-('TRX-202311151909410001', 2, '2023-11-16', '2023-11-16 02:09:52', '2023-11-16 02:09:52'),
-('TRX-202311151909540001', 3, '2023-11-16', '2023-11-16 02:10:07', '2023-11-16 02:10:07');
+INSERT INTO `tb_jurnal` (`id_jurnal`, `keterangan`, `type_transaksi`, `tgl_jurnal`, `created_at`, `update_at`) VALUES
+('TRX-202311191609240001', 'Modal Bu Ani', 2, '2023-11-19', '2023-11-19 23:09:57', '2023-11-19 23:27:43'),
+('TRX-202311191617130001', 'Penarikan uang modal', 4, '2023-11-19', '2023-11-19 23:17:37', '2023-11-19 23:17:37');
 
 -- --------------------------------------------------------
 
@@ -191,36 +182,13 @@ INSERT INTO `tb_kategori_akun` (`id_kategori_akun`, `nama_kategori`, `created_at
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_keterangan`
---
-
-CREATE TABLE `tb_keterangan` (
-  `id` int(11) NOT NULL,
-  `keterangan` varchar(255) NOT NULL,
-  `type_keterangan` int(11) NOT NULL,
-  `type_transaksi` int(11) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `update_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tb_keterangan`
---
-
-INSERT INTO `tb_keterangan` (`id`, `keterangan`, `type_keterangan`, `type_transaksi`, `created_at`, `update_at`) VALUES
-(2, 'Pembelian Buku', 1, 2, '2023-10-22 23:15:51', '2023-10-22 23:15:51'),
-(3, 'Penjualan Buku', 1, 1, '2023-10-22 23:16:26', '2023-10-22 23:16:26'),
-(7, 'Tidak Ada Keterangan', 0, 3, '2023-11-12 02:46:11', '2023-11-12 02:46:11');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tb_transaksi_keluar`
 --
 
 CREATE TABLE `tb_transaksi_keluar` (
   `id_transaksi_keluar` varchar(255) NOT NULL,
-  `id_keterangan` int(11) NOT NULL,
+  `keterangan` varchar(255) NOT NULL,
+  `type_transaksi` int(11) NOT NULL,
   `tgl_trans_keluar` date NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
@@ -230,8 +198,8 @@ CREATE TABLE `tb_transaksi_keluar` (
 -- Dumping data for table `tb_transaksi_keluar`
 --
 
-INSERT INTO `tb_transaksi_keluar` (`id_transaksi_keluar`, `id_keterangan`, `tgl_trans_keluar`, `created_at`, `update_at`) VALUES
-('TRX-202311151909410001', 2, '2023-11-16', '2023-11-16 02:09:52', '2023-11-16 02:09:52');
+INSERT INTO `tb_transaksi_keluar` (`id_transaksi_keluar`, `keterangan`, `type_transaksi`, `tgl_trans_keluar`, `created_at`, `update_at`) VALUES
+('TRX-202311191617130001', 'Penarikan uang modal', 4, '2023-11-19', '2023-11-19 23:17:37', '2023-11-19 23:17:37');
 
 -- --------------------------------------------------------
 
@@ -241,7 +209,8 @@ INSERT INTO `tb_transaksi_keluar` (`id_transaksi_keluar`, `id_keterangan`, `tgl_
 
 CREATE TABLE `tb_transaksi_masuk` (
   `id_transaksi_masuk` varchar(255) NOT NULL,
-  `id_keterangan` int(11) NOT NULL,
+  `keterangan` varchar(255) NOT NULL,
+  `type_transaksi` int(11) NOT NULL,
   `tgl_trans_masuk` date NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
@@ -251,9 +220,8 @@ CREATE TABLE `tb_transaksi_masuk` (
 -- Dumping data for table `tb_transaksi_masuk`
 --
 
-INSERT INTO `tb_transaksi_masuk` (`id_transaksi_masuk`, `id_keterangan`, `tgl_trans_masuk`, `created_at`, `update_at`) VALUES
-('TRX-202311151909260001', 3, '2023-11-16', '2023-11-16 02:09:38', '2023-11-16 02:09:38'),
-('TRX-202311151909540001', 3, '2023-11-16', '2023-11-16 02:10:07', '2023-11-16 02:10:07');
+INSERT INTO `tb_transaksi_masuk` (`id_transaksi_masuk`, `keterangan`, `type_transaksi`, `tgl_trans_masuk`, `created_at`, `update_at`) VALUES
+('TRX-202311191609240001', 'Modal Bu Ani', 2, '2023-11-19', '2023-11-19 23:09:57', '2023-11-19 23:27:43');
 
 -- --------------------------------------------------------
 
@@ -281,8 +249,7 @@ CREATE TABLE `tb_user` (
 INSERT INTO `tb_user` (`id_user`, `nama`, `email`, `username`, `password`, `level`, `status`, `foto`, `created_at`, `updated_at`) VALUES
 (22, 'admin', 'admin@gmail.com', 'admin', '$2y$10$9pXUd0AJ/9w2OOjb9weKmuiKTBBT4/McwqKDlOAtnKHgMOU1j2flC', 1, 1, '65350c97726c4_1697975447.png', '2023-10-22', '2023-10-22'),
 (24, 'Pimpinan', 'pimpinan@gmail.com', 'pimpinan', '$2y$10$37OUwkTpM9Udi8k3HuqVA.VBgX/O4xP3l6o57Yaluv6YJ4k71/A8q', 2, 1, '654dbe273937b_1699593767.jpg', '2023-11-10', '2023-11-10'),
-(25, 'Akunting', 'akunting@gmail.com', 'akunting', '$2y$10$aNhKCSrv7.LW2SzAawN5SeCIz2dOWXJdWgO9aNzlV5S.n7bUz6mTq', 3, 1, '654dbe60e32d2_1699593824.jpg', '2023-11-10', '2023-11-10'),
-(26, 'test', 'test@gmail.com', 'test', '$2y$10$ElKGiUE9U2.5voR.T0Lug.Uavttwr9AmbPkia1w0FUNUlHFxpcmo.', 3, 1, '-', '2023-11-15', '2023-11-15');
+(25, 'Akunting', 'akunting@gmail.com', 'akunting', '$2y$10$aNhKCSrv7.LW2SzAawN5SeCIz2dOWXJdWgO9aNzlV5S.n7bUz6mTq', 3, 1, '654dbe60e32d2_1699593824.jpg', '2023-11-10', '2023-11-10');
 
 --
 -- Indexes for dumped tables
@@ -332,12 +299,6 @@ ALTER TABLE `tb_kategori_akun`
   ADD PRIMARY KEY (`id_kategori_akun`);
 
 --
--- Indexes for table `tb_keterangan`
---
-ALTER TABLE `tb_keterangan`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `tb_transaksi_keluar`
 --
 ALTER TABLE `tb_transaksi_keluar`
@@ -370,12 +331,6 @@ ALTER TABLE `tb_alat`
 --
 ALTER TABLE `tb_kategori_akun`
   MODIFY `id_kategori_akun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `tb_keterangan`
---
-ALTER TABLE `tb_keterangan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tb_user`
