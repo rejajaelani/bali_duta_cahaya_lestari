@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id_transaksi = mysqli_escape_string($conn, $_POST['id-transaksi']);
     $id_akun = mysqli_escape_string($conn, $_POST['id-akun']);
-    $debet = isset($_POST['debet']) ? mysqli_escape_string($conn, intval(str_replace(',', '', $_POST['debet']))) : 0;
-    $kredit = isset($_POST['kredit']) ? mysqli_escape_string($conn, intval(str_replace(',', '', $_POST['kredit']))) : 0;
+    $debet = isset($_POST['debet']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['debet']))) : 0;
+    $kredit = isset($_POST['kredit']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['kredit']))) : 0;
     $type = mysqli_escape_string($conn, $_POST['type']);
 
     function generateUniqueID($prefix = 'PK-', $length = 6)
