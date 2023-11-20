@@ -97,6 +97,7 @@ $result = mysqli_query($conn, $sql);
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Kode Akun</th>
                                     <th>Akun</th>
                                     <th>Kategori</th>
                                     <th>Sifat</th>
@@ -111,6 +112,7 @@ $result = mysqli_query($conn, $sql);
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
+                                        echo "<td>" . $row['id_akun'] . "</td>";
                                         echo "<td>" . $row['nama'] . "</td>";
                                         echo "<td>" . $row['nama_kategori'] . "</td>";
                                         echo "<td>" . $row['sifat'] . "</td>";
