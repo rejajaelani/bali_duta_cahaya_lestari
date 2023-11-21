@@ -51,6 +51,42 @@ $totalKredit = 0;
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
+                        <?php
+                        if (!empty($_SESSION['msg'])) {
+                        ?>
+                            <div class="col-12">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>Message!</strong> <?= $_SESSION['msg']['key'] ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <?php
+                        if (!empty($_SESSION['msg-w'])) {
+                        ?>
+                            <div class="col-12">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Message!</strong> <?= $_SESSION['msg-w']['key'] ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <?php
+                        if (!empty($_SESSION['msg-f'])) {
+                        ?>
+                            <div class="col-12">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Message!</strong> <?= $_SESSION['msg-f']['key'] ?>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php } ?>
                         <div class="col-sm-6 col-lg-12">
                             <h1 class="m-0">Tambah Data Transaksi Pemasukan</h1>
                         </div><!-- /.col -->
