@@ -6,14 +6,16 @@ include "../../controller/KoneksiController.php";
 $name_page = "Data User";
 $type_page = 2;
 
-$id = mysqli_escape_string($conn, $_GET['id']);
-$sql = "SELECT * FROM tb_user WHERE id_user =" . $id;
+$id = intval(mysqli_escape_string($conn, $_GET['id']));
+// var_dump($id);
+// die;
+$sql = "SELECT * FROM tb_user WHERE id_user = " . $id;
 $result = mysqli_query($conn, $sql);
 if (!$result) {
     echo "Error : " . mysqli_error($conn);
 }
 
-while ($row = mysqli_fetch_assoc($result)) {
+while ($rowedit = mysqli_fetch_assoc($result)) {
 
 ?>
 
@@ -59,31 +61,31 @@ while ($row = mysqli_fetch_assoc($result)) {
                                             <input type="hidden" name="id" id="id" value="<?= $id ?>">
                                             <div class="form-group">
                                                 <label for="nama">Nama Lengkap</label>
-                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Lengkap..." value="<?= $row['nama'] ?>" required>
+                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Lengkap..." value="<?= $rowedit['nama'] ?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="username">Username</label>
-                                                <input type="text" class="form-control" id="username" name="username" placeholder="Username..." value="<?= $row['username'] ?>" required>
+                                                <input type="text" class="form-control" id="username" name="username" placeholder="Username..." value="<?= $rowedit['username'] ?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" placeholder="Email..." value="<?= $row['email'] ?>" required>
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="Email..." value="<?= $rowedit['email'] ?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="level">Level</label>
                                                 <select class="form-control" id="level" name="level" required>
                                                     <option style="display: none;"></option>
-                                                    <option <?= ($row['level'] == 1) ? 'selected' : '' ?> value="1">Admin</option>
-                                                    <option <?= ($row['level'] == 2) ? 'selected' : '' ?> value="2">Pimpinan</option>
-                                                    <option <?= ($row['level'] == 3) ? 'selected' : '' ?> value="3">Akunting</option>
+                                                    <option <?= ($rowedit['level'] == 1) ? 'selected' : '' ?> value="1">Admin</option>
+                                                    <option <?= ($rowedit['level'] == 2) ? 'selected' : '' ?> value="2">Pimpinan</option>
+                                                    <option <?= ($rowedit['level'] == 3) ? 'selected' : '' ?> value="3">Akunting</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="status">Status</label>
                                                 <select class="form-control" id="status" name="status" required>
                                                     <option style="display: none;"></option>
-                                                    <option <?= ($row['status'] == 1) ? 'selected' : '' ?> value="1">Active</option>
-                                                    <option <?= ($row['status'] == 0) ? 'selected' : '' ?> value="0">Non-Active</option>
+                                                    <option <?= ($rowedit['status'] == 1) ? 'selected' : '' ?> value="1">Active</option>
+                                                    <option <?= ($rowedit['status'] == 0) ? 'selected' : '' ?> value="0">Non-Active</option>
                                                 </select>
                                             </div>
                                             <!-- <div class="form-group">

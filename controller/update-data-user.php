@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Menggunakan password yang ada jika tidak ada yang baru diisi
-    $existingPassword = mysqli_fetch_assoc(mysqli_query($conn, "SELECT password FROM tb_user WHERE id_user = '$id'"))['password'];
+    $existingPassword = mysqli_fetch_assoc(mysqli_query($conn, "SELECT password FROM tb_user WHERE id_user = $id"))['password'];
     $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $existingPassword;
 
     // $targetDirectory = "../images/"; // Folder tempat menyimpan file yang diunggah
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $fileError = $_FILES["foto"]["error"];
 
     // // Menggunakan foto yang ada jika tidak ada yang baru diisi
-    // $existingFoto = mysqli_fetch_assoc(mysqli_query($conn, "SELECT foto FROM tb_user WHERE id_user = '$id'"))['foto'];
+    // $existingFoto = mysqli_fetch_assoc(mysqli_query($conn, "SELECT foto FROM tb_user WHERE id_user = $id"))['foto'];
 
     // if ($fileName) {
     //     // Memeriksa tipe-tipe file gambar yang diperbolehkan
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //     $foto = $existingFoto;
     // }
 
-    $sql = "UPDATE tb_user SET nama = '$nama', email = '$email', username = '$username', password = '$password', status = '$status', foto = '-' WHERE id_user = '$id'";
+    $sql = "UPDATE tb_user SET nama = '$nama', email = '$email', username = '$username', password = '$password', status = '$status', foto = '-' WHERE id_user = $id";
 
     if ($result = mysqli_query($conn, $sql)) {
         if ($ubah_password == true) {
