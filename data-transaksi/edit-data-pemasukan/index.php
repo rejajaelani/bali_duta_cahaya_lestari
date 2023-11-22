@@ -6,6 +6,8 @@ include "../../controller/KoneksiController.php";
 $name_page = "Data Transaksi";
 $type_page = 2;
 
+include "../../function/delMsg.php";
+
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 $id_transaksi = $id;
 
@@ -34,6 +36,42 @@ $totalKredit = 0;
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
+                    <?php
+                    if (!empty($_SESSION['msg'])) {
+                    ?>
+                        <div class="col-12">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Message!</strong> <?= $_SESSION['msg']['key'] ?>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <?php
+                    if (!empty($_SESSION['msg-w'])) {
+                    ?>
+                        <div class="col-12">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Message!</strong> <?= $_SESSION['msg-w']['key'] ?>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <?php
+                    if (!empty($_SESSION['msg-f'])) {
+                    ?>
+                        <div class="col-12">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Message!</strong> <?= $_SESSION['msg-f']['key'] ?>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    <?php } ?>
                     <div class="row mb-2">
                         <div class="col-sm-6 col-lg-12">
                             <h1 class="m-0">Edit Data Transaksi Masuk</h1>
@@ -271,6 +309,8 @@ $totalKredit = 0;
     <script src="../../assets/js/dataTable.bootstrap4.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../../assets/dist/js/adminlte.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../assets/dist/js/demo.js"></script>
     <!-- Script Here -->

@@ -13,7 +13,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $debet = isset($_POST['debet']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['debet']))) : 0;
     $kredit = isset($_POST['kredit']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['kredit']))) : 0;
     $type = mysqli_escape_string($conn, $_POST['type']);
-
+    if ($id_akun == "") {
+        $_SESSION['msg-w'] = [
+            'key' => 'Tolong pilih Akun sebelum menambahkan detail transaksi' . mysqli_error($conn),
+            'timestamp' => time()
+        ];
+        if ($type == 1) {
+            header("Location: ../data-transaksi/tambah-data-pemasukan/?id=$id_transaksi");
+            exit;
+        } else {
+            header("Location: ../data-transaksi/edit-data-pemasukan/?id=$id_transaksi");
+            exit;
+        }
+    }
     function generateUniqueID($prefix = 'PM-', $length = 6)
     {
         $characters = '0123456789';

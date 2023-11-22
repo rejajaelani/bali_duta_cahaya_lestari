@@ -6,6 +6,8 @@ include "../../controller/KoneksiController.php";
 $name_page = "Data Transaksi";
 $type_page = 2;
 
+include "../../function/delMsg.php";
+
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 
 if ($id === 0) {
@@ -316,6 +318,8 @@ $totalKredit = 0;
     <script src="../../assets/js/dataTable.bootstrap4.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../../assets/dist/js/adminlte.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../assets/dist/js/demo.js"></script>
     <!-- Script Here -->
