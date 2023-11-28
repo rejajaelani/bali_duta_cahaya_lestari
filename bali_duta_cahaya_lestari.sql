@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2023 at 11:52 AM
+-- Generation Time: Nov 28, 2023 at 05:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -45,6 +45,27 @@ INSERT INTO `tb_akun` (`id_akun`, `nama`, `id_kategori_akun`, `sifat`, `created_
 ('102', 'Prive', 5, 'Debit', '2023-11-19 23:15:46', '2023-11-19 23:15:46'),
 ('110', 'Pendapatan Penjualan', 5, 'Kredit', '2023-11-22 00:20:05', '2023-11-22 00:20:05'),
 ('111', 'Penjualan', 5, 'Debet', '2023-11-22 00:19:49', '2023-11-22 00:19:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_barang`
+--
+
+CREATE TABLE `tb_barang` (
+  `id` int(11) NOT NULL,
+  `nama_barang` varchar(255) NOT NULL,
+  `harga_barang` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `update_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_barang`
+--
+
+INSERT INTO `tb_barang` (`id`, `nama_barang`, `harga_barang`, `created_at`, `update_at`) VALUES
+(1, 'Buku', 10000, '2023-11-28 23:34:15', '2023-11-28 23:34:15');
 
 -- --------------------------------------------------------
 
@@ -213,6 +234,12 @@ ALTER TABLE `tb_akun`
   ADD KEY `fk_tb_akun_tb_kategori_akun` (`id_kategori_akun`);
 
 --
+-- Indexes for table `tb_barang`
+--
+ALTER TABLE `tb_barang`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tb_detail_jurnal`
 --
 ALTER TABLE `tb_detail_jurnal`
@@ -263,6 +290,12 @@ ALTER TABLE `tb_user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `tb_barang`
+--
+ALTER TABLE `tb_barang`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tb_kategori_akun`
