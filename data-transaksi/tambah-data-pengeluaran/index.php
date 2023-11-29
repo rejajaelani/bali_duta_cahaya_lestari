@@ -133,7 +133,7 @@ $totalKredit = 0;
                                             <label for="type-transaksi" class="col-sm-2 col-form-label">Type Transaksi</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" id="type-transaksi" name="type-transaksi" onchange="setTypeTransaksiCache()" required>
-                                                    <option value="4">-</option>
+                                                    <option value="4">Lainnya</option>
                                                     <option value="1">Operasional</option>
                                                     <option value="2">Investasi</option>
                                                     <option value="3">Pendanaan</option>
@@ -168,13 +168,46 @@ $totalKredit = 0;
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <label for="nominal" class="col-2 col-form-label">Nominal</label>
-                                            <div class="form-group col-5">
-                                                <input type="text" class="form-control" name="debet" placeholder="Debet" onkeyup="formatCurrency(this)">
+                                        <div class="form-row mb-2">
+                                            <label for="barang" class="col-2 col-form-label">Barang</label>
+                                            <div class="form-group col-2">
+                                                <select class="form-control" id="barang" required>
+                                                    <option style="display: none;"></option>
+                                                    <?php
+                                                    $sql = "SELECT * FROM tb_barang";
+                                                    $result = mysqli_query($conn, $sql);
+                                                    while ($row = mysqli_fetch_assoc($result)) { ?>
+                                                        <option value="<?= $row['harga_barang_keluar'] ?>"><?= $row['nama_barang'] ?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
-                                            <div class="form-group col-5">
-                                                <input type="text" class="form-control" name="kredit" placeholder="Kredit" onkeyup="formatCurrency(this)">
+                                            <div class="form-group col-3">
+                                                <input id="harga" type="text" class="form-control" placeholder="harga..." readonly>
+                                            </div>
+                                            <div class="form-group col-2">
+                                                <input id="qyt" type="number" class="form-control" placeholder="Qyt...">
+                                            </div>
+                                            <div class="form-group col-3">
+                                                <input id="totalHarga" type="text" class="form-control" placeholder="Total Harga..." readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="typeDetails" class="col-2 col-form-label">Type Detail Transaksi</label>
+                                            <div class="col">
+                                                <select class="form-control" id="typeDetails" disabled required>
+                                                    <option style="display: none;"></option>
+                                                    <option value="debet">Debet</option>
+                                                    <option value="kredit">Kredit</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <label for="nominal" class="col-2 col-form-label d-none">Nominal</label>
+                                            <div class="form-group col-5 d-none">
+                                                <input id="debet" type="text" class="form-control" name="debet" placeholder="Debet" onkeyup="formatCurrency(this)">
+                                            </div>
+                                            <div class="form-group col-5 d-none">
+                                                <input id="kredit" type="text" class="form-control" name="kredit" placeholder="Kredit" onkeyup="formatCurrency(this)">
                                             </div>
                                             <div class="form-group col-12">
                                                 <button class="btn btn-warning btn-sm float-right" id="tambahButton">+ Tambah Detail Transaksi</button>
@@ -264,6 +297,57 @@ $totalKredit = 0;
             if (cachedTypeTransaksi) {
                 document.getElementById('type-transaksi').value = cachedTypeTransaksi;
             }
+
+            $("#barang").change(function() {
+                // Mendapatkan nilai harga_barang dari opsi yang dipilih
+                var hargaBarang = $(this).val();
+
+                var value = hargaBarang.replace(/,/g, '');
+
+                // Menghapus karakter selain angka
+                value = value.replace(/\D/g, '');
+
+                // Mengubah angka menjadi format ribuan
+                value = new Intl.NumberFormat().format(value);
+
+                $("#harga").val("Rp. " + value);
+            });
+
+            $("#qyt").keyup(function() {
+                var hargaString = $("#harga").val();
+                // Membersihkan tanda mata uang dan tanda pemisah ribuan
+                var hargaCleaned = hargaString.replace(/[^\d]/g, '');
+                // Mengonversi menjadi tipe data integer
+                var harga = parseInt(hargaCleaned);
+                var qyt = $(this).val();
+                var totalHarga = harga * qyt;
+
+                // Mengubah angka menjadi format ribuan
+                value = new Intl.NumberFormat().format(totalHarga);
+
+                $("#totalHarga").val("Rp. " + value);
+
+                $("#typeDetails").removeAttr("disabled");
+            });
+
+            $("#typeDetails").change(function() {
+                var type = $(this).val();
+                var hargaString = $("#totalHarga").val();
+                // Membersihkan tanda mata uang dan tanda pemisah ribuan
+                var hargaCleaned = hargaString.replace(/[^\d]/g, '');
+                // Mengonversi menjadi tipe data integer
+                var harga = parseInt(hargaCleaned);
+                value = new Intl.NumberFormat().format(harga);
+                if (type == "debet") {
+                    $("#debet").val(value);
+                    $("#kredit").val(0);
+                } else if (type == "kredit") {
+                    $("#kredit").val(value);
+                    $("#debet").val(0);
+                }
+
+            });
+
         });
 
         function setTanggalCache() {

@@ -10,9 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id = mysqli_escape_string($conn, $_POST['id']);
     $nama = mysqli_escape_string($conn, $_POST['nama']);
-    $harga = isset($_POST['harga']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga']))) : 0;
+    $harga_masuk = isset($_POST['harga-masuk']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga-masuk']))) : 0;
+    $harga_keluar = isset($_POST['harga-keluar']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga-keluar']))) : 0;
 
-    $sql = "UPDATE tb_barang SET nama_barang = '$nama', harga_barang = $harga, update_at = '$tgl_now' WHERE id = $id";
+    $sql = "UPDATE tb_barang SET nama_barang = '$nama', harga_barang_masuk = $harga_masuk, harga_barang_keluar = $harga_keluar, update_at = '$tgl_now' WHERE id = $id";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {

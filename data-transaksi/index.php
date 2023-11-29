@@ -16,8 +16,18 @@ $name_page = "Data Transaksi";
 $type_page = 1;
 
 // Inisialisasi variabel SQL
-$sql1 = "SELECT * FROM tb_transaksi_masuk ttm INNER JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun ORDER BY tdtm.id DESC";
-$sql2 = "SELECT * FROM tb_transaksi_keluar ttk INNER JOIN tb_detail_trans_keluar tdtk ON ttk.id_transaksi_keluar = tdtk.id_transaksi_keluar INNER JOIN tb_akun ta ON tdtk.id_akun = ta.id_akun ORDER BY tdtk.id DESC";
+$sql1 = "SELECT ttm.`id_transaksi_masuk`, ttm.`tgl_trans_masuk`, ttm.`keterangan`, SUM(tdtm.`debet`) AS debet, SUM(tdtm.`kredit`) AS kredit 
+FROM tb_transaksi_masuk ttm 
+INNER JOIN tb_detail_trans_masuk tdtm ON ttm.id_transaksi_masuk = tdtm.id_transaksi_masuk 
+INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
+GROUP BY ttm.`id_transaksi_masuk`
+ORDER BY ttm.`id_transaksi_masuk` DESC";
+$sql2 = "SELECT ttm.`id_transaksi_keluar`, ttm.`tgl_trans_keluar`, ttm.`keterangan`, SUM(tdtm.`debet`) AS debet, SUM(tdtm.`kredit`) AS kredit 
+FROM tb_transaksi_keluar ttm 
+INNER JOIN tb_detail_trans_keluar tdtm ON ttm.id_transaksi_keluar = tdtm.id_transaksi_keluar 
+INNER JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
+GROUP BY ttm.`id_transaksi_keluar`
+ORDER BY ttm.`id_transaksi_keluar` DESC";
 $result_pemasukan = mysqli_query($conn, $sql1);
 $result_pengeluaran = mysqli_query($conn, $sql2);
 
@@ -103,8 +113,6 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     <th>No</th>
                                     <th>Tanggal</th>
                                     <th>Keterangan</th>
-                                    <th>Kode Akun</th>
-                                    <th>Nama Akun</th>
                                     <th>Debet</th>
                                     <th>Kredit</th>
                                     <th>Action</th>
@@ -119,8 +127,6 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['tgl_trans_masuk'] . "</td>";
                                         echo "<td>" . $row['keterangan'] . "</td>";
-                                        echo "<td>" . $row['id_akun'] . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
                                         echo "<td>" . $row['debet'] . "</td>";
                                         echo "<td>" . $row['kredit'] . "</td>";
                                 ?>
@@ -147,7 +153,7 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                         $no++; // Tingkatkan nomor baris setiap kali iterasi
                                     }
                                 } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data user.</td></tr>";
+                                    echo "<tr><td colspan='9'>Tidak ada data transaksi masuk.</td></tr>";
                                 }
 
 
@@ -171,8 +177,6 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                     <th>No</th>
                                     <th>Tanggal</th>
                                     <th>Keterangan</th>
-                                    <th>Kode Akun</th>
-                                    <th>Nama Akun</th>
                                     <th>Debet</th>
                                     <th>Kredit</th>
                                     <th>Action</th>
@@ -187,8 +191,6 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['tgl_trans_keluar'] . "</td>";
                                         echo "<td>" . $row['keterangan'] . "</td>";
-                                        echo "<td>" . $row['id_akun'] . "</td>";
-                                        echo "<td>" . $row['nama'] . "</td>";
                                         echo "<td>" . $row['debet'] . "</td>";
                                         echo "<td>" . $row['kredit'] . "</td>";
                                 ?>
@@ -215,7 +217,7 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                         $no++; // Tingkatkan nomor baris setiap kali iterasi
                                     }
                                 } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data user.</td></tr>";
+                                    echo "<tr><td colspan='9'>Tidak ada data transaksi keluar.</td></tr>";
                                 }
 
 

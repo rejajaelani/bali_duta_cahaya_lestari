@@ -9,9 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tgl_now = date('Y-m-d H:i:s');
 
     $nama = mysqli_escape_string($conn, $_POST['nama']);
-    $harga = isset($_POST['harga']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga']))) : 0;
+    $harga_masuk = isset($_POST['harga-masuk']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga-masuk']))) : 0;
+    $harga_keluar = isset($_POST['harga-keluar']) ? mysqli_escape_string($conn, intval(str_replace(['.', ','], '', $_POST['harga-keluar']))) : 0;
 
-    $sql = "INSERT INTO tb_barang (nama_barang, harga_barang, update_at) VALUES ('$nama', $harga, '$tgl_now')";
+    $sql = "INSERT INTO tb_barang (nama_barang, harga_barang_masuk, harga_barang_keluar, update_at) VALUES ('$nama', $harga_masuk, $harga_keluar, '$tgl_now')";
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {

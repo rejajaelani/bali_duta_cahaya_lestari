@@ -51,8 +51,12 @@ $type_page = 2;
                                             <input type="text" class="form-control" id="nama" name="nama" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="harga">Harga Barang</label>
-                                            <input type="text" class="form-control" id="harga" name="harga" onkeyup="formatCurrency(this)" required>
+                                            <label for="harga-masuk">Harga Barang Masuk</label>
+                                            <input type="text" class="form-control" id="harga-masuk" name="harga-masuk" onkeyup="formatCurrency(this)" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="harga-keluar">Harga Barang Keluar</label>
+                                            <input type="text" class="form-control" id="harga-keluar" name="harga-keluar" onkeyup="formatCurrency(this)" required>
                                         </div>
                                         <div class="row" style="width: max-content !important;">
                                             <div class="col">

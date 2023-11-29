@@ -13,7 +13,24 @@ if (!$result) {
     echo "Error : " . mysqli_error($conn);
 }
 
+function formatCurrency($input)
+{
+    // Menghapus tanda koma yang ada dalam input
+    $value = str_replace(',', '', $input);
 
+    // Menghapus karakter selain angka
+    $value = preg_replace(
+        '/\D/',
+        '',
+        $value
+    );
+
+    // Mengubah angka menjadi format ribuan
+    $value = number_format($value);
+
+    // Mengembalikan hasil
+    return $value;
+}
 
 ?>
 
@@ -64,29 +81,18 @@ if (!$result) {
                                                 <input type="text" class="form-control" id="nama" name="nama" value="<?= $row['nama_barang'] ?>" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="harga">Harga Barang</label>
+                                                <label for="harga-masuk">Harga Barang Masuk</label>
                                                 <?php
-                                                function formatCurrency($input)
-                                                {
-                                                    // Menghapus tanda koma yang ada dalam input
-                                                    $value = str_replace(',', '', $input);
-
-                                                    // Menghapus karakter selain angka
-                                                    $value = preg_replace(
-                                                        '/\D/',
-                                                        '',
-                                                        $value
-                                                    );
-
-                                                    // Mengubah angka menjadi format ribuan
-                                                    $value = number_format($value);
-
-                                                    // Mengembalikan hasil
-                                                    return $value;
-                                                }
-                                                $harga = formatCurrency($row['harga_barang']);
+                                                $harga_masuk = formatCurrency($row['harga_barang_masuk']);
                                                 ?>
-                                                <input type="text" class="form-control" id="harga" name="harga" value="<?= $harga ?>" onkeyup="formatCurrency(this)" required>
+                                                <input type="text" class="form-control" id="harga-masuk" name="harga-masuk" value="<?= $harga_masuk ?>" onkeyup="formatCurrency(this)" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="harga-keluar">Harga Barang Keluar</label>
+                                                <?php
+                                                $harga_keluar = formatCurrency($row['harga_barang_keluar']);
+                                                ?>
+                                                <input type="text" class="form-control" id="harga-keluar" name="harga-keluar" value="<?= $harga_keluar ?>" onkeyup="formatCurrency(this)" required>
                                             </div>
                                             <div class="row" style="width: max-content !important;">
                                                 <div class="col">

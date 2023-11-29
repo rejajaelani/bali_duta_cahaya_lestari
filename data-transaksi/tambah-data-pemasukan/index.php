@@ -133,7 +133,7 @@ $totalKredit = 0;
                                             <label for="type-transaksi" class="col-sm-2 col-form-label">Type Transaksi</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" id="type-transaksi" name="type-transaksi" onchange="setTypeTransaksiCache()" required>
-                                                    <option value="4">-</option>
+                                                    <option value="4">Lainnya</option>
                                                     <option value="1">Operasional</option>
                                                     <option value="2">Investasi</option>
                                                     <option value="3">Pendanaan</option>
@@ -177,7 +177,7 @@ $totalKredit = 0;
                                                     $sql = "SELECT * FROM tb_barang";
                                                     $result = mysqli_query($conn, $sql);
                                                     while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                        <option value="<?= $row['harga_barang'] ?>"><?= $row['nama_barang'] ?></option>
+                                                        <option value="<?= $row['harga_barang_masuk'] ?>"><?= $row['nama_barang'] ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>

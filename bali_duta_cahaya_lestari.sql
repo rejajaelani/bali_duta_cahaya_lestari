@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 28, 2023 at 05:43 PM
+-- Generation Time: Nov 29, 2023 at 09:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -55,17 +55,11 @@ INSERT INTO `tb_akun` (`id_akun`, `nama`, `id_kategori_akun`, `sifat`, `created_
 CREATE TABLE `tb_barang` (
   `id` int(11) NOT NULL,
   `nama_barang` varchar(255) NOT NULL,
-  `harga_barang` int(11) NOT NULL,
+  `harga_barang_masuk` int(11) NOT NULL,
+  `harga_barang_keluar` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tb_barang`
---
-
-INSERT INTO `tb_barang` (`id`, `nama_barang`, `harga_barang`, `created_at`, `update_at`) VALUES
-(1, 'Buku', 10000, '2023-11-28 23:34:15', '2023-11-28 23:34:15');
 
 -- --------------------------------------------------------
 
@@ -114,13 +108,6 @@ CREATE TABLE `tb_detail_trans_masuk` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tb_detail_trans_masuk`
---
-
-INSERT INTO `tb_detail_trans_masuk` (`id`, `id_transaksi_masuk`, `id_akun`, `debet`, `kredit`, `created_at`, `update_at`) VALUES
-('PM-414905', 'TRX-202311211722140001', '111', 3220000, 0, '2023-11-22 00:28:51', '2023-11-22 00:28:51');
 
 -- --------------------------------------------------------
 
@@ -186,13 +173,6 @@ CREATE TABLE `tb_transaksi_masuk` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `update_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tb_transaksi_masuk`
---
-
-INSERT INTO `tb_transaksi_masuk` (`id_transaksi_masuk`, `keterangan`, `type_transaksi`, `tgl_trans_masuk`, `created_at`, `update_at`) VALUES
-('TRX-202311211722140001', 'Pembelian TV', 1, '2023-11-22', '2023-11-22 00:30:28', '2023-11-22 00:32:56');
 
 -- --------------------------------------------------------
 

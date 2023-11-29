@@ -97,7 +97,8 @@ $result = mysqli_query($conn, $sql);
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Barang</th>
-                                    <th>Harga</th>
+                                    <th>Harga Masuk</th>
+                                    <th>Harga Keluar</th>
                                     <th>Created at</th>
                                     <th>Action</th>
                                 </tr>
@@ -111,7 +112,8 @@ $result = mysqli_query($conn, $sql);
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['nama_barang'] . "</td>";
-                                        echo "<td>" . $row['harga_barang'] . "</td>";
+                                        echo "<td>" . $row['harga_barang_masuk'] . "</td>";
+                                        echo "<td>" . $row['harga_barang_keluar'] . "</td>";
                                         echo "<td>" . $row['created_at'] . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
