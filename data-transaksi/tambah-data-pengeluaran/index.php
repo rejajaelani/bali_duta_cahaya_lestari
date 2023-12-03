@@ -130,7 +130,7 @@ $totalKredit = 0;
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="type-transaksi" class="col-sm-2 col-form-label">Type Transaksi</label>
+                                            <label for="type-transaksi" class="col-sm-2 col-form-label">Kategori</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" id="type-transaksi" name="type-transaksi" onchange="setTypeTransaksiCache()" required>
                                                     <option value="4">Lainnya</option>
@@ -152,6 +152,15 @@ $totalKredit = 0;
                                         </div>
                                     </form>
                                     <form id="tambahForm" action="../../controller/input-data-detail-trans-keluar.php" method="post">
+                                        <div class="form-group row">
+                                            <label for="typeTransaksi" class="col-2 col-form-label">Type Transaksi</label>
+                                            <div class="col">
+                                                <select class="form-control" id="typeTransaksi" required>
+                                                    <option value="barang">Barang</option>
+                                                    <option value="non">Non - Barang</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <input type="hidden" name="type" value="1">
                                         <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $id_transaksi ?>">
                                         <div class="form-group row">
@@ -168,45 +177,46 @@ $totalKredit = 0;
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-row mb-2">
-                                            <label for="barang" class="col-2 col-form-label">Barang</label>
-                                            <div class="form-group col-2">
-                                                <select class="form-control" id="barang" required>
-                                                    <option style="display: none;"></option>
-                                                    <?php
-                                                    $sql = "SELECT * FROM tb_barang";
-                                                    $result = mysqli_query($conn, $sql);
-                                                    while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                        <option value="<?= $row['harga_barang_keluar'] ?>"><?= $row['nama_barang'] ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                        <div id="wrraperBarang">
+                                            <div class="form-row mb-2">
+                                                <label for="barang" class="col-2 col-form-label">Barang</label>
+                                                <div class="form-group col-2">
+                                                    <select class="form-control" id="barang" required>
+                                                        <option style="display: none;"></option>
+                                                        <?php
+                                                        $sql = "SELECT * FROM tb_barang";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        while ($row = mysqli_fetch_assoc($result)) { ?>
+                                                            <option value="<?= $row['harga_barang_keluar'] ?>"><?= $row['nama_barang'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <input id="harga" type="text" class="form-control" placeholder="harga..." readonly>
+                                                </div>
+                                                <div class="form-group col-2">
+                                                    <input id="qyt" type="number" class="form-control" placeholder="Qyt...">
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <input id="totalHarga" type="text" class="form-control" placeholder="Total Harga..." readonly>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-3">
-                                                <input id="harga" type="text" class="form-control" placeholder="harga..." readonly>
-                                            </div>
-                                            <div class="form-group col-2">
-                                                <input id="qyt" type="number" class="form-control" placeholder="Qyt...">
-                                            </div>
-                                            <div class="form-group col-3">
-                                                <input id="totalHarga" type="text" class="form-control" placeholder="Total Harga..." readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="typeDetails" class="col-2 col-form-label">Type Detail Transaksi</label>
-                                            <div class="col">
-                                                <select class="form-control" id="typeDetails" disabled required>
-                                                    <option style="display: none;"></option>
-                                                    <option value="debet">Debet</option>
-                                                    <option value="kredit">Kredit</option>
-                                                </select>
+                                            <div class="form-group row">
+                                                <label for="typeDetails" class="col-2 col-form-label" style="opacity: 0;">Type Detail Transaksi</label>
+                                                <div class="col">
+                                                    <select class="form-control" id="typeDetails" disabled required>
+                                                        <option value="debet">Debet</option>
+                                                        <option value="kredit">Kredit</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <label for="nominal" class="col-2 col-form-label d-none">Nominal</label>
-                                            <div class="form-group col-5 d-none">
+                                            <label id="labelNominal" for="nominal" class="col-2 col-form-label d-none">Nominal</label>
+                                            <div id="wrraperDebet" class="form-group col-5 d-none">
                                                 <input id="debet" type="text" class="form-control" name="debet" placeholder="Debet" onkeyup="formatCurrency(this)">
                                             </div>
-                                            <div class="form-group col-5 d-none">
+                                            <div id="wrraperKredit" class="form-group col-5 d-none">
                                                 <input id="kredit" type="text" class="form-control" name="kredit" placeholder="Kredit" onkeyup="formatCurrency(this)">
                                             </div>
                                             <div class="form-group col-12">
@@ -297,6 +307,20 @@ $totalKredit = 0;
             if (cachedTypeTransaksi) {
                 document.getElementById('type-transaksi').value = cachedTypeTransaksi;
             }
+
+            $("#typeTransaksi").change(function() {
+                if ($(this).val() == "non") {
+                    $("#wrraperBarang").addClass("d-none");
+                    $("#labelNominal").removeClass("d-none");
+                    $("#wrraperDebet").removeClass("d-none");
+                    $("#wrraperKredit").removeClass("d-none");
+                } else {
+                    $("#wrraperBarang").removeClass("d-none");
+                    $("#labelNominal").addClass("d-none");
+                    $("#wrraperDebet").addClass("d-none");
+                    $("#wrraperKredit").addClass("d-none");
+                }
+            });
 
             $("#barang").change(function() {
                 // Mendapatkan nilai harga_barang dari opsi yang dipilih
