@@ -15,6 +15,12 @@ include "../function/delMsg.php";
 $name_page = "Data Transaksi";
 $type_page = 1;
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 // Inisialisasi variabel SQL
 $sql1 = "SELECT ttm.`id_transaksi_masuk`, ttm.`tgl_trans_masuk`, ttm.`keterangan`, SUM(tdtm.`debet`) AS debet, SUM(tdtm.`kredit`) AS kredit 
 FROM tb_transaksi_masuk ttm 
@@ -123,12 +129,14 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                 if ($result_pemasukan->num_rows > 0) {
                                     $no = 1;
                                     while ($row = $result_pemasukan->fetch_assoc()) {
+                                        $debetString = ($row['debet'] == 0) ? "-" : rupiahin($row['debet']);
+                                        $kreditString = ($row['kredit'] == 0) ? "-" : rupiahin($row['kredit']);
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['tgl_trans_masuk'] . "</td>";
                                         echo "<td>" . $row['keterangan'] . "</td>";
-                                        echo "<td>" . $row['debet'] . "</td>";
-                                        echo "<td>" . $row['kredit'] . "</td>";
+                                        echo "<td>" . $debetString . "</td>";
+                                        echo "<td>" . $kreditString . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <?php if ($_SESSION['dataUser']['level'] == 1) { ?>
@@ -140,7 +148,7 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                                     </a>
                                                     <form action="../controller/delete-data-transaksi.php" method="post">
                                                         <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_masuk'] ?>">
-                                                        <input type="hidden" name="type" id="type" value="2">
+                                                        <input type="hidden" name="type" id="type" value="1">
                                                         <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
                                                             <i class="fas fa-times"></i> Delete
                                                         </button>
@@ -187,12 +195,14 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                 if ($result_pengeluaran->num_rows > 0) {
                                     $no = 1;
                                     while ($row = $result_pengeluaran->fetch_assoc()) {
+                                        $debetString = ($row['debet'] == 0) ? "-" : rupiahin($row['debet']);
+                                        $kreditString = ($row['kredit'] == 0) ? "-" : rupiahin($row['kredit']);
                                         echo "<tr>";
                                         echo "<td>" . $no . "</td>";
                                         echo "<td>" . $row['tgl_trans_keluar'] . "</td>";
                                         echo "<td>" . $row['keterangan'] . "</td>";
-                                        echo "<td>" . $row['debet'] . "</td>";
-                                        echo "<td>" . $row['kredit'] . "</td>";
+                                        echo "<td>" . $debetString . "</td>";
+                                        echo "<td>" . $kreditString . "</td>";
                                 ?>
                                         <td style="width: 135px !important;">
                                             <?php if ($_SESSION['dataUser']['level'] == 1) { ?>

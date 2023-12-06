@@ -17,6 +17,12 @@ $type_page = 2;
 $currentMonth = date('m');
 $currentYear = date('Y');
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 if (isset($_GET['src-year'])) {
     $selectedYear = intval($_GET['src-year']);
 } else {
@@ -30,21 +36,21 @@ if (isset($_GET['src-month'])) {
 }
 
 // Inisialisasi variabel SQL
-$sql1 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+$sql1 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) AS Debet, SUM(tdj.kredit) AS Kredit, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
-INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
-WHERE ta.nama LIKE '%Pendapatan%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal`
+WHERE ta.nama LIKE '%Pendapatan%' OR ta.nama LIKE '%Penjualan%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth
 GROUP BY Keterangan_Name
 ORDER BY tdj.created_at ASC";
-$sql2 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+$sql2 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) AS Debet, SUM(tdj.kredit) AS Kredit, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
-INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal`
 WHERE ta.nama LIKE '%Beban%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
 GROUP BY Keterangan_Name";
-$sql3 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+$sql3 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) AS ModalAwal, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
 INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
-WHERE ta.nama LIKE '%Modal%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+WHERE tj.keterangan LIKE '%Modal Awal%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
 GROUP BY Keterangan_Name";
 $sql4 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
@@ -181,8 +187,12 @@ $result4 = mysqli_query($conn, $sql4);
                                 $modalAwal = 0;
                                 while ($row = mysqli_fetch_assoc($result3)) { ?>
                                     <tr>
-                                        <td><?= $row['Keterangan_Name'] ?> (Awal)</td>
-                                        <td><?= $row['Jumlah'] ?></td>
+                                        <td><?= $row['Keterangan_Name'] ?></td>
+                                        <?php if ($row['Jumlah'] == 0) { ?>
+                                            <td><?= rupiahin($row['ModalAwal']) ?></td>
+                                        <?php } else { ?>
+                                            <td><?= rupiahin($row['Jumlah']) ?></td>
+                                        <?php } ?>
                                     </tr>
                                 <?php
                                     $modalAwal += $row['Jumlah'];
@@ -191,21 +201,45 @@ $result4 = mysqli_query($conn, $sql4);
                                 <?php
                                 $totalPendapatan = 0;
                                 while ($row = mysqli_fetch_assoc($result1)) {
-                                    $totalPendapatan += $row['Jumlah'];
+                                    $nilai = 0;
+                                    if ($row['Jumlah'] == 0) {
+                                        $nilai = $row['Debet'];
+                                    } else if ($row['Jumlah'] < 0) {
+                                        $nilai = $row['Kredit'];
+                                    } else {
+                                        $nilai = $row['Jumlah'];
+                                    }
+                                    $totalPendapatan += $nilai;
                                 }
                                 $totalBeban = 0;
                                 while ($row = mysqli_fetch_assoc($result2)) {
-                                    $totalBeban += $row['Jumlah'];
+                                    $nilaiB = 0;
+                                    if ($row['Jumlah'] == 0) {
+                                        $nilaiB = -$row['Debet'];
+                                    } else if ($row['Jumlah'] < 0) {
+                                        $nilaiB = -$row['Kredit'];
+                                    } else {
+                                        $nilaiB = -$row['Jumlah'];
+                                    }
+                                    $totalBeban += $nilaiB;
                                 }
-                                $totalModalAwal = $modalAwal + ($totalPendapatan - $totalBeban)
+                                $totalModalAwal = $modalAwal + ($totalPendapatan - $totalBeban);
+                                $totalLabaBersih = 0;
+                                if ($totalBeban < 0) {
+                                    $totalLabaBersih = $totalBeban + $totalPendapatan;
+                                } else {
+                                    $totalLabaBersih = $totalPendapatan - $totalBeban;
+                                }
+                                $totalLabaBersihString = ($totalLabaBersih == 0) ? "-" : rupiahin($totalLabaBersih);
+                                $totalModalAwalString = ($totalModalAwal == 0) ? "-" : rupiahin($totalModalAwal);
                                 ?>
                                 <tr>
                                     <td>Laba Bersih</td>
-                                    <td><?= $totalPendapatan - $totalBeban ?></td>
+                                    <td><?= $totalLabaBersihString ?></td>
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td style="border-top: 2px solid black;"><?= $totalModalAwal ?></td>
+                                    <td style="border-top: 2px solid black;"><?= $totalModalAwalString ?></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -216,15 +250,17 @@ $result4 = mysqli_query($conn, $sql4);
                                 while ($row = mysqli_fetch_assoc($result4)) { ?>
                                     <tr>
                                         <td><?= $row['Keterangan_Name'] ?></td>
-                                        <td><?= $row['Jumlah'] ?></td>
+                                        <td><?= rupiahin($row['Jumlah']) ?></td>
                                     </tr>
                                 <?php
                                     $prive += $row['Jumlah'];
                                 }
+                                $totalModalAkhir = $totalModalAwal - $prive;
+                                $totalModalAkhirString = ($totalModalAkhir == 0) ? "-" : rupiahin($totalModalAkhir);
                                 ?>
                                 <tr>
                                     <td>Modal Akhir</td>
-                                    <td><?= $totalModalAwal - $prive ?></td>
+                                    <td><?= $totalModalAkhirString ?></td>
                                 </tr>
                             </tbody>
                         </table>

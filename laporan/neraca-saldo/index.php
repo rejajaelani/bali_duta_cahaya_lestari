@@ -14,6 +14,12 @@ include "../../function/delMsg.php";
 $name_page = "Laporan Neraca Saldo";
 $type_page = 2;
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 $currentMonth = date('m');
 $currentYear = date('Y');
 
@@ -173,20 +179,24 @@ $result = mysqli_query($conn, $sql);
                                     $jumDebet = 0;
                                     $jumKredit = 0;
                                     while ($row = $result->fetch_assoc()) {
+                                        $DebetString = ($row['Debet'] == 0) ? "-" : rupiahin($row['Debet']);
+                                        $KreditString = ($row['Kredit'] == 0) ? "-" : rupiahin($row['Kredit']);
                                         echo "<tr>";
                                         echo "<td>" . $row['id_akun'] . "</td>";
                                         echo "<td>" . $row['Akun_Name'] . "</td>";
-                                        echo "<td>" . $row['Debet'] . "</td>";
-                                        echo "<td>" . $row['Kredit'] . "</td>";
+                                        echo "<td>" . $DebetString . "</td>";
+                                        echo "<td>" . $KreditString . "</td>";
                                         echo "</tr>";
                                         $jumDebet += $row['Debet'];
                                         $jumKredit += $row['Kredit'];
                                     }
+                                    $jumDebetString = ($jumDebet == 0) ? "-" : rupiahin($jumDebet);
+                                    $jumKreditString = ($jumKredit == 0) ? "-" : rupiahin($jumKredit);
                                 ?>
                                     <tr>
                                         <td colspan="2" class="font-weight-bold">Jumlah</td>
-                                        <td><?= $jumDebet ?></td>
-                                        <td><?= $jumKredit ?></td>
+                                        <td><?= $jumDebetString ?></td>
+                                        <td><?= $jumKreditString ?></td>
                                     </tr>
                                 <?php
                                 } else {

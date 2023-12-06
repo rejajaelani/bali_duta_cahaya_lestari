@@ -14,6 +14,12 @@ include "../../function/delMsg.php";
 $name_page = "Laporan Jurnal Umum";
 $type_page = 2;
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 $currentMonth = date('m');
 $currentYear = date('Y');
 
@@ -187,11 +193,12 @@ $result = mysqli_query($conn, $sql);
                                             // Kosongkan kolom Tanggal jika tanggal_jurnal sama dengan sebelumnya
                                             echo "<td></td>";
                                         }
-
+                                        $DebetString = ($row['Debet'] == 0) ? "-" : rupiahin($row['Debet']);
+                                        $KreditString = ($row['Kredit'] == 0) ? "-" : rupiahin($row['Kredit']);
                                         echo "<td>" . $row['Akun_Name'] . "</td>";
                                         echo "<td></td>";
-                                        echo "<td>" . $row['Debet'] . "</td>";
-                                        echo "<td>" . $row['Kredit'] . "</td>";
+                                        echo "<td>" . $DebetString . "</td>";
+                                        echo "<td>" . $KreditString . "</td>";
                                         echo "</tr>";
 
                                         // Tambahkan nilai debet dan kredit pada total
@@ -202,10 +209,12 @@ $result = mysqli_query($conn, $sql);
                                     }
 
                                     // Setelah loop, Anda dapat menampilkan total debet dan kredit di luar loop
+                                    $debetT = ($totalDebet == 0) ? "-" : rupiahin($totalDebet);
+                                    $kreditT = ($totalKredit == 0) ? "-" : rupiahin($totalKredit);
                                     echo "<tr>";
                                     echo "<td colspan='3'>Total</td>";
-                                    echo "<td>$totalDebet</td>";
-                                    echo "<td>$totalKredit</td>";
+                                    echo "<td>$debetT</td>";
+                                    echo "<td>$kreditT</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='9'>Tidak ada data jurnal.</td></tr>";

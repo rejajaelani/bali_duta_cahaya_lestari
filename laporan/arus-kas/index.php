@@ -14,6 +14,12 @@ include "../../function/delMsg.php";
 $name_page = "Laporan Arus Kas";
 $type_page = 2;
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 $currentMonth = date('m');
 $currentYear = date('Y');
 
@@ -167,24 +173,24 @@ if (isset($_GET['src-month'])) {
                                         }
                                         echo "<td>" . $row['keterangan'] . "</td>";
                                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
-                                            echo "<td>Rp. " . $row['debet'] . "</td>";
+                                            echo "<td>" . rupiahin($row['debet']) . "</td>";
                                             $nilai = $row['debet'];
                                         } elseif ($row['kredit'] != 0 && $row['debet'] == 0) {
-                                            echo "<td>(Rp. " . $row['kredit'] . ")</td>";
+                                            echo "<td>" . rupiahin(-$row['kredit']) . "</td>";
                                             $nilai = -$row['kredit'];
                                         } elseif ($row['debet'] == $row['kredit']) {
                                             $nilai = $row['debet'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         } elseif ($row['debet'] != 0 && $row['kredit'] != 0) {
                                             $nilai = $row['debet'] - $row['kredit'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>Rp. " . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
                                         $total += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>Rp. " . $total . "</td>";
+                                    echo "<td>" . rupiahin($total) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -212,24 +218,24 @@ if (isset($_GET['src-month'])) {
                                         }
                                         echo "<td>" . $row['keterangan'] . "</td>";
                                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
-                                            echo "<td>Rp. " . $row['debet'] . "</td>";
+                                            echo "<td>" . rupiahin($row['debet']) . "</td>";
                                             $nilai = $row['debet'];
                                         } elseif ($row['kredit'] != 0 && $row['debet'] == 0) {
-                                            echo "<td>(Rp. " . $row['kredit'] . ")</td>";
+                                            echo "<td>" . rupiahin(-$row['kredit']) . "</td>";
                                             $nilai = -$row['kredit'];
                                         } elseif ($row['debet'] == $row['kredit']) {
                                             $nilai = $row['debet'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         } elseif ($row['debet'] != 0 && $row['kredit'] != 0) {
                                             $nilai = $row['debet'] - $row['kredit'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
                                         $total += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>Rp. " . $total . "</td>";
+                                    echo "<td>Rp. " . rupiahin($total) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -257,24 +263,24 @@ if (isset($_GET['src-month'])) {
                                         }
                                         echo "<td>" . $row['keterangan'] . "</td>";
                                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
-                                            echo "<td>Rp. " . $row['debet'] . "</td>";
+                                            echo "<td>" . rupiahin($row['debet']) . "</td>";
                                             $nilai = $row['debet'];
                                         } elseif ($row['kredit'] != 0 && $row['debet'] == 0) {
-                                            echo "<td>(Rp. " . $row['kredit'] . ")</td>";
+                                            echo "<td>" . rupiahin(-$row['kredit']) . "</td>";
                                             $nilai = -$row['kredit'];
                                         } elseif ($row['debet'] == $row['kredit']) {
                                             $nilai = $row['debet'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         } elseif ($row['debet'] != 0 && $row['kredit'] != 0) {
                                             $nilai = $row['debet'] - $row['kredit'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
                                         $total += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>Rp. " . $total . "</td>";
+                                    echo "<td>" . rupiahin($total) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -302,24 +308,24 @@ if (isset($_GET['src-month'])) {
                                         }
                                         echo "<td>" . $row['keterangan'] . "</td>";
                                         if ($row['debet'] != 0 && $row['kredit'] == 0) {
-                                            echo "<td>Rp. " . $row['debet'] . "</td>";
+                                            echo "<td>" . rupiahin($row['debet']) . "</td>";
                                             $nilai = $row['debet'];
                                         } elseif ($row['kredit'] != 0 && $row['debet'] == 0) {
-                                            echo "<td>(Rp. " . $row['kredit'] . ")</td>";
+                                            echo "<td>" . rupiahin(-$row['kredit']) . "</td>";
                                             $nilai = -$row['kredit'];
                                         } elseif ($row['debet'] == $row['kredit']) {
                                             $nilai = $row['debet'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         } elseif ($row['debet'] != 0 && $row['kredit'] != 0) {
                                             $nilai = $row['debet'] - $row['kredit'];
-                                            echo "<td>Rp. " . $nilai . "</td>";
+                                            echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
                                         $total += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>Rp. " . $total . "</td>";
+                                    echo "<td>" . rupiahin($total) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";

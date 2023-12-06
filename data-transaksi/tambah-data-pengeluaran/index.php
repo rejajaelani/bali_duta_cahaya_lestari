@@ -205,6 +205,7 @@ $totalKredit = 0;
                                                 <label for="typeDetails" class="col-2 col-form-label" style="opacity: 0;">Type Detail Transaksi</label>
                                                 <div class="col">
                                                     <select class="form-control" id="typeDetails" disabled required>
+                                                        <option value="">--- Pilih Debet or Kredit ---</option>
                                                         <option value="debet">Debet</option>
                                                         <option value="kredit">Kredit</option>
                                                     </select>

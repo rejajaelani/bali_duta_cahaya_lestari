@@ -12,6 +12,12 @@ if (isset($_SESSION['isLogin']) != true) {
 $name_page = "Laporan Laba Rugi";
 $type_page = 2;
 
+function rupiahin($angka)
+{
+    $rupiah = number_format($angka, 0, ',', '.');
+    return 'Rp ' . $rupiah;
+}
+
 if (isset($_POST['print-year'])) {
     $selectedYear = intval($_POST['print-year']);
 } else {
@@ -27,15 +33,15 @@ if (isset($_POST['print-month'])) {
 $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
 
 // Inisialisasi variabel SQL
-$sql1 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+$sql1 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) AS Debet, SUM(tdj.kredit) AS Kredit, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
-INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
-WHERE ta.nama LIKE '%Pendapatan%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal`
+WHERE ta.nama LIKE '%Pendapatan%' OR ta.nama LIKE '%Penjualan%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth
 GROUP BY Keterangan_Name
 ORDER BY tdj.created_at ASC";
-$sql2 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
+$sql2 = "SELECT ta.nama AS Akun_Name, tj.`keterangan` AS Keterangan_Name, SUM(tdj.`debet`) AS Debet, SUM(tdj.kredit) AS Kredit, SUM(tdj.`debet`) - SUM(tdj.kredit) AS Jumlah FROM tb_akun ta 
 INNER JOIN tb_detail_jurnal tdj ON ta.`id_akun` = tdj.`id_akun` 
-INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal` 
+INNER JOIN tb_jurnal tj ON tdj.`id_jurnal` = tj.`id_jurnal`
 WHERE ta.nama LIKE '%Beban%' AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth  
 GROUP BY Keterangan_Name";
 $result1 = mysqli_query($conn, $sql1);
@@ -92,22 +98,28 @@ $result2 = mysqli_query($conn, $sql2);
                     <tr>
                         <td style="padding-left: 50px;"><?= $row['Keterangan_Name'] ?></td>
                         <?php
-                        if (substr($row['Jumlah'], 0, 1) === '-') {
+                        $nilai = 0;
+                        if ($row['Jumlah'] == 0) {
+                            $nilai = $row['Debet'];
                         ?>
-                            <td>(<?= $row['Jumlah'] ?>)</td>
-                        <?php } else { ?>
-                            <td><?= $row['Jumlah'] ?></td>
+                            <td><?= rupiahin($row['Debet']) ?></td>
+                        <?php } else if ($row['Jumlah'] < 0) {
+                            $nilai = $row['Kredit']; ?>
+                            <td><?= rupiahin($row['Kredit']) ?></td>
+                        <?php } else {
+                            $nilai = $row['Jumlah'] ?>
+                            <td><?= rupiahin($row['Jumlah']) ?></td>
                         <?php } ?>
                         <td></td>
                     </tr>
                 <?php
-                    $totalPendapatan += $row['Jumlah'];
+                    $totalPendapatan += $nilai;
                 }
                 ?>
                 <tr>
                     <td>Laba Kotor(1)</td>
                     <td></td>
-                    <td><?= $totalPendapatan ?></td>
+                    <td><?= rupiahin($totalPendapatan) ?></td>
                 </tr>
                 <tr>
                     <td>Beban</td>
@@ -121,27 +133,41 @@ $result2 = mysqli_query($conn, $sql2);
                     <tr>
                         <td style="padding-left: 50px;"><?= $row['Keterangan_Name'] ?></td>
                         <?php
-                        if (substr($row['Jumlah'], 0, 1) === '-') {
+                        $nilaiB = 0;
+                        if ($row['Jumlah'] == 0) {
+                            $nilaiB = -$row['Debet'];
                         ?>
-                            <td>(<?= $row['Jumlah'] ?>)</td>
-                        <?php } else { ?>
-                            <td><?= $row['Jumlah'] ?></td>
+                            <td><?= rupiahin(-$row['Debet']) ?></td>
+                        <?php } else if ($row['Jumlah'] < 0) {
+                            $nilaiB = -$row['Kredit']; ?>
+                            <td><?= rupiahin(-$row['Kredit']) ?></td>
+                        <?php } else {
+                            $nilaiB = -$row['Jumlah'] ?>
+                            <td><?= rupiahin(-$row['Jumlah']) ?></td>
                         <?php } ?>
                         <td></td>
                     </tr>
                 <?php
-                    $totalBeban += $row['Jumlah'];
+                    $totalBeban += $nilaiB;
                 }
                 ?>
                 <tr>
                     <td>Jumlah Beban(2)</td>
                     <td></td>
-                    <td><?= $totalBeban ?></td>
+                    <td><?= rupiahin($totalBeban) ?></td>
                 </tr>
                 <tr>
+                    <?php
+                    $totalLabaBersih = 0;
+                    if ($totalBeban < 0) {
+                        $totalLabaBersih = $totalBeban + $totalPendapatan;
+                    } else {
+                        $totalLabaBersih = $totalPendapatan - $totalBeban;
+                    }
+                    ?>
                     <td>Laba/Rugi Bersih(1-2)</td>
                     <td></td>
-                    <td><?= $totalPendapatan - $totalBeban ?></td>
+                    <td><?= rupiahin($totalLabaBersih) ?></td>
                 </tr>
             </tbody>
         </table>
