@@ -83,34 +83,28 @@ $result = mysqli_query($conn, $sql);
                 <tr>
                     <th>No Akun</th>
                     <th>Nama Akun</th>
-                    <th>Debet</th>
-                    <th>Kredit</th>
+                    <th>Jumlah</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if ($result->num_rows > 0) {
-                    $jumDebet = 0;
-                    $jumKredit = 0;
+                    $jumHasil = 0;
                     while ($row = $result->fetch_assoc()) {
-                        $DebetString = ($row['Debet'] == 0) ? "-" : rupiahin($row['Debet']);
-                        $KreditString = ($row['Kredit'] == 0) ? "-" : rupiahin($row['Kredit']);
+                        $Hasil = $row['Debet'] - $row['Kredit'];
+                        $HasilString = rupiahin($Hasil);
                         echo "<tr>";
                         echo "<td>" . $row['id_akun'] . "</td>";
                         echo "<td>" . $row['Akun_Name'] . "</td>";
-                        echo "<td>" . $DebetString . "</td>";
-                        echo "<td>" . $KreditString . "</td>";
+                        echo "<td>" . $HasilString . "</td>";
                         echo "</tr>";
-                        $jumDebet += $row['Debet'];
-                        $jumKredit += $row['Kredit'];
+                        $jumHasil += $Hasil;
                     }
-                    $jumDebetString = ($jumDebet == 0) ? "-" : rupiahin($jumDebet);
-                    $jumKreditString = ($jumKredit == 0) ? "-" : rupiahin($jumKredit);
+                    $jumHasilString = rupiahin($jumHasil);
                 ?>
                     <tr>
-                        <td colspan="2" class="font-weight-bold">Jumlah</td>
-                        <td><?= $jumDebetString ?></td>
-                        <td><?= $jumKreditString ?></td>
+                        <td colspan="2" class="font-weight-bold">Total</td>
+                        <td><?= $jumHasilString ?></td>
                     </tr>
                 <?php
                 } else {

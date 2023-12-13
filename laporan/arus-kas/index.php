@@ -165,7 +165,7 @@ if (isset($_GET['src-month'])) {
                                 $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal`WHERE tj.`type_transaksi` = 1 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` DESC";
                                 $result = mysqli_query($conn, $sql);
                                 if ($result->num_rows > 0) {
-                                    $total = 0;
+                                    $total1 = 0;
                                     $nilai = 0;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
@@ -186,11 +186,11 @@ if (isset($_GET['src-month'])) {
                                             echo "<td>Rp. " . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
-                                        $total += $nilai;
+                                        $total1 += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>" . rupiahin($total) . "</td>";
+                                    echo "<td>" . rupiahin($total1) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -210,7 +210,7 @@ if (isset($_GET['src-month'])) {
                                 $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal`WHERE tj.`type_transaksi` = 2 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` DESC";
                                 $result = mysqli_query($conn, $sql);
                                 if ($result->num_rows > 0) {
-                                    $total = 0;
+                                    $total2 = 0;
                                     $nilai = 0;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
@@ -231,11 +231,11 @@ if (isset($_GET['src-month'])) {
                                             echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
-                                        $total += $nilai;
+                                        $total2 += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>Rp. " . rupiahin($total) . "</td>";
+                                    echo "<td>Rp. " . rupiahin($total2) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -255,7 +255,7 @@ if (isset($_GET['src-month'])) {
                                 $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal`WHERE tj.`type_transaksi` = 3 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` DESC";
                                 $result = mysqli_query($conn, $sql);
                                 if ($result->num_rows > 0) {
-                                    $total = 0;
+                                    $total3 = 0;
                                     $nilai = 0;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
@@ -276,11 +276,11 @@ if (isset($_GET['src-month'])) {
                                             echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
-                                        $total += $nilai;
+                                        $total3 += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>" . rupiahin($total) . "</td>";
+                                    echo "<td>" . rupiahin($total3) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -300,7 +300,7 @@ if (isset($_GET['src-month'])) {
                                 $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal`WHERE tj.`type_transaksi` = 4 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` DESC";
                                 $result = mysqli_query($conn, $sql);
                                 if ($result->num_rows > 0) {
-                                    $total = 0;
+                                    $total4 = 0;
                                     $nilai = 0;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
@@ -321,11 +321,11 @@ if (isset($_GET['src-month'])) {
                                             echo "<td>" . rupiahin($nilai) . "</td>";
                                         }
                                         echo "</tr>";
-                                        $total += $nilai;
+                                        $total4 += $nilai;
                                     }
                                     echo "<tr>";
                                     echo "<td>Total</td>";
-                                    echo "<td>" . rupiahin($total) . "</td>";
+                                    echo "<td>" . rupiahin($total4) . "</td>";
                                     echo "</tr>";
                                 } else {
                                     echo "<tr><td colspan='2'>Tidak ada data arus kas.</td></tr>";
@@ -333,6 +333,15 @@ if (isset($_GET['src-month'])) {
 
                                 ?>
                             </tbody>
+                        </table>
+                        <table class="table table-bordered" style="font-size: 16px !important;">
+                            <?php
+                            $totalKeseluruhan = ($total1 ?? 0) + ($total2 ?? 0) + ($total3 ?? 0) + ($total4 ?? 0);
+                            ?>
+                            <tr>
+                                <th>Total Keseluruhan</th>
+                                <td><?= rupiahin($totalKeseluruhan) ?></td>
+                            </tr>
                         </table>
                     </div>
                 </div>

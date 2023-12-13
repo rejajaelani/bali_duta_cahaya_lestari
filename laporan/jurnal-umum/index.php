@@ -36,13 +36,12 @@ if (isset($_GET['src-month'])) {
 }
 
 // Inisialisasi variabel SQL
-$sql = "SELECT CAST(tdtm.created_at AS DATE) AS Tanggal, ta.nama AS Akun_Name, SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit 
-FROM tb_jurnal ttm  
-LEFT JOIN tb_detail_jurnal tdtm ON ttm.id_jurnal = tdtm.id_jurnal 
-LEFT JOIN tb_akun ta ON tdtm.id_akun = ta.id_akun 
-WHERE YEAR(ttm.created_at) = $selectedYear AND MONTH(ttm.created_at) = $selectedMonth 
-GROUP BY Tanggal, tdtm.id_akun
-ORDER BY tdtm.id";
+$sql = "SELECT tj.`tgl_jurnal` AS Tanggal, ta.`nama` AS Nama_Akun, tdj.`debet` AS Debet, tdj.`kredit` AS Kredit
+FROM tb_jurnal tj 
+JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` 
+JOIN tb_akun ta ON tdj.`id_akun` = ta.`id_akun`
+WHERE YEAR(tj.`tgl_jurnal`) = $selectedYear AND MONTH(tj.`tgl_jurnal`) = $selectedMonth 
+ORDER BY tj.`tgl_jurnal` ASC";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -169,7 +168,6 @@ $result = mysqli_query($conn, $sql);
                                 <tr>
                                     <th>Tanggal</th>
                                     <th>Nama Akun</th>
-                                    <th>Ref</th>
                                     <th>Debet</th>
                                     <th>Kredit</th>
                                 </tr>
@@ -195,8 +193,7 @@ $result = mysqli_query($conn, $sql);
                                         }
                                         $DebetString = ($row['Debet'] == 0) ? "-" : rupiahin($row['Debet']);
                                         $KreditString = ($row['Kredit'] == 0) ? "-" : rupiahin($row['Kredit']);
-                                        echo "<td>" . $row['Akun_Name'] . "</td>";
-                                        echo "<td></td>";
+                                        echo "<td>" . $row['Nama_Akun'] . "</td>";
                                         echo "<td>" . $DebetString . "</td>";
                                         echo "<td>" . $KreditString . "</td>";
                                         echo "</tr>";
@@ -212,7 +209,7 @@ $result = mysqli_query($conn, $sql);
                                     $debetT = ($totalDebet == 0) ? "-" : rupiahin($totalDebet);
                                     $kreditT = ($totalKredit == 0) ? "-" : rupiahin($totalKredit);
                                     echo "<tr>";
-                                    echo "<td colspan='3'>Total</td>";
+                                    echo "<td colspan='2'>Total</td>";
                                     echo "<td>$debetT</td>";
                                     echo "<td>$kreditT</td>";
                                     echo "</tr>";
