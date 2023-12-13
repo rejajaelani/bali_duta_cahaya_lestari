@@ -117,7 +117,7 @@ $result2 = mysqli_query($conn, $sql2);
                 }
                 ?>
                 <tr>
-                    <td>Laba Kotor(1)</td>
+                    <td>Laba Kotor</td>
                     <td></td>
                     <td><?= rupiahin($totalPendapatan) ?></td>
                 </tr>
@@ -152,7 +152,7 @@ $result2 = mysqli_query($conn, $sql2);
                 }
                 ?>
                 <tr>
-                    <td>Jumlah Beban(2)</td>
+                    <td>Jumlah Beban</td>
                     <td></td>
                     <td><?= rupiahin($totalBeban) ?></td>
                 </tr>
@@ -165,7 +165,7 @@ $result2 = mysqli_query($conn, $sql2);
                         $totalLabaBersih = $totalPendapatan - $totalBeban;
                     }
                     ?>
-                    <td>Laba/Rugi Bersih(1-2)</td>
+                    <td>Laba/Rugi Bersih</td>
                     <td></td>
                     <td><?= rupiahin($totalLabaBersih) ?></td>
                 </tr>
