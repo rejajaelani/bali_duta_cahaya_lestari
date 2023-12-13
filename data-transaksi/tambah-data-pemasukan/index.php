@@ -30,7 +30,7 @@ if ($id === 0) {
     $id_transaksi = $id;
 }
 
-$sql0 = "SELECT * FROM tb_detail_trans_masuk INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_masuk = '$id'";
+$sql0 = "SELECT * FROM tb_detail_trans_masuk INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_masuk = '$id' ORDER BY created_at DESC";
 $result0 = mysqli_query($conn, $sql0);
 
 $totalDebet = 0;

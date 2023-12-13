@@ -11,7 +11,7 @@ include "../../function/delMsg.php";
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 $id_transaksi = $id;
 
-$sql0 = "SELECT * FROM tb_detail_trans_keluar INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_keluar = '$id'";
+$sql0 = "SELECT * FROM tb_detail_trans_keluar INNER JOIN tb_akun USING (id_akun) WHERE id_transaksi_keluar = '$id' ORDER BY created_at DESC";
 $result0 = mysqli_query($conn, $sql0);
 
 $sql1 = "SELECT * FROM tb_transaksi_keluar tbtm WHERE tbtm.id_transaksi_keluar = '$id_transaksi'";
