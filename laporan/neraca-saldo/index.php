@@ -169,28 +169,48 @@ $result = mysqli_query($conn, $sql);
                                 <tr>
                                     <th>No Akun</th>
                                     <th>Nama Akun</th>
-                                    <th>Jumlah</th>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 if ($result->num_rows > 0) {
-                                    $jumHasil = 0;
+                                    $jumDebet = 0;
+                                    $jumKredit = 0;
                                     while ($row = $result->fetch_assoc()) {
-                                        $Hasil = $row['Debet'] - $row['Kredit'];
-                                        $HasilString = rupiahin($Hasil);
                                         echo "<tr>";
                                         echo "<td>" . $row['id_akun'] . "</td>";
                                         echo "<td>" . $row['Akun_Name'] . "</td>";
-                                        echo "<td>" . $HasilString . "</td>";
+                                        if ($row['Debet'] != 0 && $row['Kredit'] != 0) {
+                                            $Hasil = $row['Debet'] - $row['Kredit'];
+                                            if ($Hasil < 0) {
+                                                echo "<td></td>";
+                                                echo "<td>" . rupiahin($Hasil) . "</td>";
+                                                $jumKredit += $Hasil;
+                                            } else {
+                                                echo "<td>" . rupiahin($Hasil) . "</td>";
+                                                echo "<td></td>";
+                                                $jumDebet += $Hasil;
+                                            }
+                                        } elseif ($row['Debet'] != 0 && $row['Kredit'] == 0) {
+                                            echo "<td>" . rupiahin($row['Debet']) . "</td>";
+                                            echo "<td></td>";
+                                            $jumDebet += $row['Debet'];
+                                        } elseif ($row['Debet'] == 0 && $row['Kredit'] != 0) {
+                                            echo "<td></td>";
+                                            echo "<td>" . rupiahin($row['Kredit']) . "</td>";
+                                            $jumKredit += $row['Kredit'];
+                                        }
                                         echo "</tr>";
-                                        $jumHasil += $Hasil;
                                     }
-                                    $jumHasilString = rupiahin($jumHasil);
+                                    $jumDebetString = rupiahin($jumDebet);
+                                    $jumKreditString = rupiahin($jumKredit);
                                 ?>
                                     <tr>
                                         <td colspan="2" class="font-weight-bold">Total</td>
-                                        <td><?= $jumHasilString ?></td>
+                                        <td><?= $jumDebetString ?></td>
+                                        <td><?= $jumKreditString ?></td>
                                     </tr>
                                 <?php
                                 } else {
