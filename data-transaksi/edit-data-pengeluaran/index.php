@@ -95,7 +95,7 @@ $totalKredit = 0;
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form id="simpanForm" action="../../controller/update-data-transaksi-masuk.php" method="post" class="mb-2 mt-4">
+                                    <form id="simpanForm" action="../../controller/update-data-transaksi-keluar.php" method="post" class="mb-2 mt-4">
                                         <?php
                                         if ($result1->num_rows > 0) {
                                             while ($row = $result1->fetch_assoc()) {
