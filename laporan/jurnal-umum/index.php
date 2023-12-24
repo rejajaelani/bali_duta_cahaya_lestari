@@ -41,7 +41,7 @@ FROM tb_jurnal tj
 JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` 
 JOIN tb_akun ta ON tdj.`id_akun` = ta.`id_akun`
 WHERE YEAR(tj.`tgl_jurnal`) = $selectedYear AND MONTH(tj.`tgl_jurnal`) = $selectedMonth 
-ORDER BY tj.`tgl_jurnal` ASC";
+ORDER BY tj.`tgl_jurnal`, tdj.`created_at` ASC";
 $result = mysqli_query($conn, $sql);
 
 ?>

@@ -133,7 +133,7 @@ $result = mysqli_query($conn, $sql);
                                         $no++; // Tingkatkan nomor baris setiap kali iterasi
                                     }
                                 } else {
-                                    echo "<tr><td colspan='9'>Tidak ada data akun.</td></tr>";
+                                    echo "<tr><td colspan='9'>Tidak ada data barang.</td></tr>";
                                 }
 
                                 // Tutup koneksi

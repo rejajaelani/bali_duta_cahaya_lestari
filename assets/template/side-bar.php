@@ -23,8 +23,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item <?= ($name_page == 'Data User' || $name_page == 'Data Akun' || $name_page == 'Data Barang') ? 'menu-is-opening menu-open' : '' ?>">
-                            <a href="#" class="nav-link <?= ($name_page == 'Data User' || $name_page == 'Data Akun' || $name_page == 'Data Barang') ? 'active' : '' ?>">
+                        <li class="nav-item <?= ($name_page == 'Data User' || $name_page == 'Data Akun' || $name_page == 'Data Barang' || $name_page == 'Data All Transaksi Akun') ? 'menu-is-opening menu-open' : '' ?>">
+                            <a href="#" class="nav-link <?= ($name_page == 'Data User' || $name_page == 'Data Akun' || $name_page == 'Data Barang' || $name_page == 'Data All Transaksi Akun') ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Data Master
@@ -48,6 +48,12 @@
                                     <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-barang" class="nav-link <?= ($name_page == 'Data Barang') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Data Barang</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= ($type_page == 1) ? '../' : '../../' ?>data-all-transaksi-akun" class="nav-link <?= ($name_page == 'Data All Transaksi Akun') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data All Transaksi Akun</p>
                                     </a>
                                 </li>
                             </ul>
