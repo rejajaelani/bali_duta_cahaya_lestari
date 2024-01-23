@@ -128,6 +128,8 @@ $result2 = mysqli_query($conn, $sql2);
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <select class="form-control" name="src-year" id="src-year">
+                                                    <option <?= ($selectedYear == 2025) ? 'selected' : '' ?>>2025</option>
+                                                    <option <?= ($selectedYear == 2024) ? 'selected' : '' ?>>2024</option>
                                                     <option <?= ($selectedYear == 2023) ? 'selected' : '' ?>>2023</option>
                                                     <option <?= ($selectedYear == 2022) ? 'selected' : '' ?>>2022</option>
                                                     <option <?= ($selectedYear == 2021) ? 'selected' : '' ?>>2021</option>
@@ -203,7 +205,7 @@ $result2 = mysqli_query($conn, $sql2);
                                 $totalPendapatanString = ($totalPendapatan == 0) ? "-" : rupiahin($totalPendapatan);
                                 ?>
                                 <tr>
-                                    <td>Laba Kotor</td>
+                                    <td>Total Pendapatan</td>
                                     <td></td>
                                     <td><?= $totalPendapatanString ?></td>
                                 </tr>
@@ -253,7 +255,7 @@ $result2 = mysqli_query($conn, $sql2);
                                     }
                                     $totalLabaBersihString = ($totalLabaBersih == 0) ? "-" : rupiahin($totalLabaBersih);
                                     ?>
-                                    <td>Laba/Rugi Bersih</td>
+                                    <td>Laba Bersih</td>
                                     <td></td>
                                     <td><?= $totalLabaBersihString ?></td>
                                 </tr>

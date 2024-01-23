@@ -124,14 +124,17 @@ $result = mysqli_query($conn, $sql);
                                         }
                                         echo "<td>" . $level . "</td>";
                                         $status = "";
+                                        $statusColor = "";
                                         if ($row['status'] == 1) {
                                             $status = 'Active';
+                                            $statusColor = "success";
                                         } elseif ($row['status'] == 0) {
                                             $status = 'Non-Active';
+                                            $statusColor = "secondary";
                                         }
-                                        echo "<td>" . $status . "</td>";
+                                        echo "<td><span class='badge badge-sm badge-$statusColor'>" . $status . "</span></td>";
                                         echo "<td>" . $row['created_at'] . "</td>";
-                                        if ($_SESSION['dataUser']['level'] == 1 && $row['level'] == 1) {
+                                        if ($_SESSION['dataUser']['level'] == 1) {
                                 ?>
                                             <td style="width: 135px !important;">
                                                 <button class="btn btn-warning disabled">No Action</button>

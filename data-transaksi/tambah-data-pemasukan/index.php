@@ -12,11 +12,11 @@ $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 
 if ($id === 0) {
     $prefix = "TRX-";
-    $date = date("YmdHis"); // Format tanggal dan waktu
+    $date = date("Ymd"); // Format tanggal dan waktu
     $counter = 1;
-
+    $unique = false;
     do {
-        $id_transaksi = $prefix . $date . sprintf("%04d", $counter); // sprintf untuk format angka 4 digit
+        $id_transaksi = $prefix . "IN" . $date . sprintf("%04d", $counter); // sprintf untuk format angka 4 digit
         $sql = "SELECT id_transaksi_masuk FROM tb_transaksi_masuk WHERE id_transaksi_masuk = '$id_transaksi'";
         $result = mysqli_query($conn, $sql);
 
@@ -434,7 +434,16 @@ $totalKredit = 0;
     <!-- Script Here -->
     <script>
         $(document).ready(function() {
-            $("#example1").DataTable();
+            // $("#example1").DataTable();
+
+            var today = new Date();
+
+            // Format tanggal ke format YYYY-MM-DD yang sesuai dengan input date
+            var formattedDate = today.toISOString().split('T')[0];
+
+            // Set nilai input date
+            $("#date").val(formattedDate);
+
         });
 
 

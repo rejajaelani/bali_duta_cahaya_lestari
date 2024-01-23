@@ -140,6 +140,8 @@ $result4 = mysqli_query($conn, $sql4);
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <select class="form-control" name="src-year" id="src-year">
+                                                    <option <?= ($selectedYear == 2025) ? 'selected' : '' ?>>2025</option>
+                                                    <option <?= ($selectedYear == 2024) ? 'selected' : '' ?>>2024</option>
                                                     <option <?= ($selectedYear == 2023) ? 'selected' : '' ?>>2023</option>
                                                     <option <?= ($selectedYear == 2022) ? 'selected' : '' ?>>2022</option>
                                                     <option <?= ($selectedYear == 2021) ? 'selected' : '' ?>>2021</option>

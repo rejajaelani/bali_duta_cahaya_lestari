@@ -90,13 +90,20 @@ $result4 = mysqli_query($conn, $sql4);
 <body>
 
     <div class="container">
-        <div class="kop" style="text-align: center;">
-            <h5 style="padding: 0 0 5px 0;margin: 0;">PT. Bali Duta Cahaya Lestari</h5>
-            <h5 style="padding: 0 0 5px 0;margin: 0;">Perubahan Modal</h5>
+        <div class="kop" style="margin: 20px 1%;padding: 5px;display: flex;width: 98%;justify-content: center;gap: 20px;border: 1px solid black;">
+            <div class="image">
+                <img src="../images/logo.png" width="50" height="50">
+            </div>
+            <div class="text">
+                <h3 style="padding: 0 0 5px 0;margin: 0;">PT. Bali Duta Cahaya Lestari</h3>
+                <p style="padding: 0 0 5px 0;margin: 0;">JL Teuku Umar, Denpasar, Bali, 80113, Indonesia</p>
+            </div>
+        </div>
+        <div style="margin-top: 20px;">
+            <h3 style="padding: 0 0 5px 0;margin: 0;text-align: center;margin-bottom: 10px;">Perubahan Modal</h3>
             <h5 style="padding: 0 0 5px 0;margin: 0;">Priode <?= $namaBulan . " " . $selectedYear ?></h5>
         </div>
-
-        <table>
+        <table style="margin-top: -2px;">
             <tbody>
                 <?php
                 $modalAwal = 0;

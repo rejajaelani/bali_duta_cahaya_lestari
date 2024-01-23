@@ -92,15 +92,15 @@ if (isset($_GET['src-year'])) {
             <section class="content">
                 <?php
 
-                $sql1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
-                $sql2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $currentYear AND MONTH(created_at) = " . $currentMonth;
+                $sql1 = "SELECT SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit FROM tb_detail_trans_masuk tdtm LEFT OUTER JOIN tb_transaksi_masuk ttm ON ttm.`id_transaksi_masuk` = tdtm.`id_transaksi_masuk` WHERE MONTH(ttm.`tgl_trans_masuk`) = $currentMonth AND YEAR(ttm.`tgl_trans_masuk`) = $currentYear";
+                $sql2 = "SELECT SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit FROM tb_detail_trans_keluar tdtm LEFT OUTER JOIN tb_transaksi_keluar ttm ON ttm.`id_transaksi_keluar` = tdtm.`id_transaksi_keluar` WHERE MONTH(ttm.`tgl_trans_keluar`) = $currentMonth AND YEAR(ttm.`tgl_trans_keluar`) = $currentYear";
                 $result1 = mysqli_query($conn, $sql1);
                 $result2 = mysqli_query($conn, $sql2);
                 $row1 = mysqli_fetch_assoc($result1);
                 $row2 = mysqli_fetch_assoc($result2);
 
-                $totalPengeluaran = $row2['Debet'] + $row2['Kredit'];
-                $totalPemasukan = $row1['Debet'] + $row1['Kredit'];
+                $totalPengeluaran = $row2['Debet'];
+                $totalPemasukan = $row1['Debet'];
                 ?>
                 <!-- Default box -->
                 <div class="card">
@@ -117,11 +117,11 @@ if (isset($_GET['src-year'])) {
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="mr-2 p-3 bg-success w-100 rounded" style="text-align: right;border: 2px solid #242424;color: #242424 !important;font-size: 22px;font-weight: bold;">
-                                Pengeluaran Bulan <?php echo date('F'); ?> <br>
+                                Pengeluaran <?php echo date('F'); ?> <?php echo date('Y'); ?> <br>
                                 <?= 'Rp. ' . number_format($totalPengeluaran, 0, ',', '.'); ?>
                             </div>
                             <div class="ml-2 p-3 bg-warning w-100 rounded" style="text-align: right;border: 2px solid #242424;color: #242424 !important;font-size: 22px;font-weight: bold;">
-                                Pemasukan Bulan <?php echo date('F'); ?> <br>
+                                Pemasukan <?php echo date('F'); ?> <?php echo date('Y'); ?> <br>
                                 <?= 'Rp. ' . number_format($totalPemasukan, 0, ',', '.'); ?>
                             </div>
                         </div>
@@ -136,6 +136,8 @@ if (isset($_GET['src-year'])) {
                                                     <div class="col-4">
                                                         <div class="form-group">
                                                             <select class="form-control" name="src-year" id="src-year">
+                                                                <option <?= ($selectedYear == 2025) ? 'selected' : '' ?>>2025</option>
+                                                                <option <?= ($selectedYear == 2024) ? 'selected' : '' ?>>2024</option>
                                                                 <option <?= ($selectedYear == 2023) ? 'selected' : '' ?>>2023</option>
                                                                 <option <?= ($selectedYear == 2022) ? 'selected' : '' ?>>2022</option>
                                                                 <option <?= ($selectedYear == 2021) ? 'selected' : '' ?>>2021</option>
@@ -237,8 +239,8 @@ if (isset($_GET['src-year'])) {
     $dataKredit = [];
 
     for ($i = 1; $i <= 12; $i++) {
-        $sqlData1 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_masuk WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
-        $sqlData2 = "SELECT SUM(debet) AS Debet, SUM(kredit) AS Kredit FROM tb_detail_trans_keluar WHERE YEAR(created_at) = $selectedYear AND MONTH(created_at) = " . $i;
+        $sqlData1 = "SELECT SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit FROM tb_detail_trans_masuk tdtm LEFT OUTER JOIN tb_transaksi_masuk ttm ON ttm.`id_transaksi_masuk` = tdtm.`id_transaksi_masuk` WHERE MONTH(ttm.`tgl_trans_masuk`) = $i AND YEAR(ttm.`tgl_trans_masuk`) = $selectedYear";
+        $sqlData2 = "SELECT SUM(tdtm.debet) AS Debet, SUM(tdtm.kredit) AS Kredit FROM tb_detail_trans_keluar tdtm LEFT OUTER JOIN tb_transaksi_keluar ttm ON ttm.`id_transaksi_keluar` = tdtm.`id_transaksi_keluar` WHERE MONTH(ttm.`tgl_trans_keluar`) = $i AND YEAR(ttm.`tgl_trans_keluar`) = $selectedYear";
         $resultData1 = mysqli_query($conn, $sqlData1);
         $resultData2 = mysqli_query($conn, $sqlData2);
         $rowData1 = mysqli_fetch_assoc($resultData1);
@@ -248,8 +250,8 @@ if (isset($_GET['src-year'])) {
         $kredit1 = intval($rowData1['Kredit'] ?? 0);
         $kredit2 = intval($rowData2['Kredit'] ?? 0);
 
-        $dataDebet[] = $debet1 + $kredit1;
-        $dataKredit[] = $debet2 + $kredit2;
+        $dataDebet[] = $debet1;
+        $dataKredit[] = $debet2;
     }
 
     // echo "Debet --------------------- </br>";

@@ -63,12 +63,20 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
 <body>
 
     <div class="container">
-        <div class="kop" style="text-align: center;">
-            <h5 style="padding: 0 0 5px 0;margin: 0;">PT. Bali Duta Cahaya Lestari</h5>
-            <h5 style="padding: 0 0 5px 0;margin: 0;">Arus Kas</h5>
+        <div class="kop" style="margin: 20px 1%;padding: 5px;display: flex;width: 98%;justify-content: center;gap: 20px;border: 1px solid black;">
+            <div class="image">
+                <img src="../images/logo.png" width="50" height="50">
+            </div>
+            <div class="text">
+                <h3 style="padding: 0 0 5px 0;margin: 0;">PT. Bali Duta Cahaya Lestari</h3>
+                <p style="padding: 0 0 5px 0;margin: 0;">JL Teuku Umar, Denpasar, Bali, 80113, Indonesia</p>
+            </div>
+        </div>
+        <div style="margin-top: 20px;">
+            <h3 style="padding: 0 0 5px 0;margin: 0;text-align: center;margin-bottom: 10px;">Arus Kas</h3>
             <h5 style="padding: 0 0 5px 0;margin: 0;">Priode <?= $namaBulan . " " . $selectedYear ?></h5>
         </div>
-        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
+        <table style="margin-top: -2px;">
             <thead>
                 <tr>
                     <th colspan="2">Arus Kas dari Aktifitas Operasional</th>
