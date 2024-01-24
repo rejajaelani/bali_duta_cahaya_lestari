@@ -174,7 +174,7 @@ $result2 = mysqli_query($conn, $sql2);
                         <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
                             <tbody>
                                 <tr>
-                                    <td>Penjualan</td>
+                                    <td>Pendapatan</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
