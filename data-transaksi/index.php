@@ -146,13 +146,36 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                                     <a href="edit-data-pemasukan/?id=<?= $row['id_transaksi_masuk'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
                                                         <i class="fas fa-pen"></i> Edit
                                                     </a>
-                                                    <form action="../controller/delete-data-transaksi.php" method="post">
-                                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_masuk'] ?>">
-                                                        <input type="hidden" name="type" id="type" value="1">
-                                                        <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
+
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;" data-toggle="modal" data-target="#exampleModal-<?= $row['id_transaksi_masuk'] ?>">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal-<?= $row['id_transaksi_masuk'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?= $row['id_transaksi_masuk'] ?>" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel-<?= $row['id_transaksi_masuk'] ?>">Delete Transaksi</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <form action="../controller/delete-data-transaksi.php" method="post">
+                                                                    <div class="modal-body">
+                                                                        <p>Apakah anda yakin ingin menghapus transaksi ini?</p>
+                                                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_masuk'] ?>">
+                                                                        <input type="hidden" name="type" id="type" value="1">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             <?php } ?>
@@ -212,13 +235,36 @@ $result_pengeluaran = mysqli_query($conn, $sql2);
                                                     <a href="edit-data-pengeluaran/?id=<?= $row['id_transaksi_keluar'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
                                                         <i class="fas fa-pen"></i> Edit
                                                     </a>
-                                                    <form action="../controller/delete-data-transaksi.php" method="post">
-                                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>">
-                                                        <input type="hidden" name="type" id="type" value="2">
-                                                        <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
+
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;" data-toggle="modal" data-target="#exampleModal-<?= $row['id_transaksi_keluar'] ?>">
+                                                        <i class="fas fa-times"></i> Delete
+                                                    </button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal-<?= $row['id_transaksi_keluar'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?= $row['id_transaksi_keluar'] ?>" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel-<?= $row['id_transaksi_keluar'] ?>">Delete Transaksi</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <form action="../controller/delete-data-transaksi.php" method="post">
+                                                                    <div class="modal-body">
+                                                                        <p>Apakah anda yakin ingin menghapus transaksi ini?</p>
+                                                                        <input type="hidden" name="id-transaksi" id="id-transaksi" value="<?= $row['id_transaksi_keluar'] ?>">
+                                                                        <input type="hidden" name="type" id="type" value="2">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             <?php } ?>

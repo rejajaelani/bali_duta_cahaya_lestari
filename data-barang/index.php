@@ -121,12 +121,34 @@ $result = mysqli_query($conn, $sql);
                                                 <a href="edit-data/?id=<?= $row['id'] ?>" class="btn btn-sm btn-primary d-flex align-items-center" style="gap: 5px;">
                                                     <i class="fas fa-pen"></i> Edit
                                                 </a>
-                                                <form action="../controller/delete-data-barang.php" method="post">
-                                                    <input type="hidden" name="id" id="id" value="<?= $row['id'] ?>">
-                                                    <button class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;">
-                                                        <i class="fas fa-times"></i> Delete
-                                                    </button>
-                                                </form>
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-danger btn-sm d-flex align-items-center" style="gap: 5px;" data-toggle="modal" data-target="#exampleModal-<?= $row['id'] ?>">
+                                                    <i class="fas fa-times"></i> Delete
+                                                </button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal-<?= $row['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?= $row['id'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel-<?= $row['id'] ?>">Delete Barang</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form action="../controller/delete-data-barang.php" method="post">
+                                                                <div class="modal-body">
+                                                                    <p>Apakah anda yakin ingin menghapus barang ini?</p>
+                                                                    <input type="hidden" name="id" id="id" value="<?= $row['id'] ?>">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                 <?php
