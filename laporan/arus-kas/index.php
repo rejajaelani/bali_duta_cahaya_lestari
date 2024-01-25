@@ -163,7 +163,7 @@ if (isset($_GET['src-month'])) {
                             $rowSaldoAwal = $resultSaldoAwal->fetch_assoc()
                             ?>
                             <tr>
-                                <th colspan="2">Saldo Awal</th>
+                                <th colspan="2">Saldo Awal Kas</th>
                                 <td style="width: 300px !important;font-weight: bold;"><?= rupiahin($rowSaldoAwal['debet']) ?></td>
                             </tr>
                         </table>
@@ -379,7 +379,7 @@ if (isset($_GET['src-month'])) {
                             $totalKeseluruhan = (($total1 ?? 0) + ($total3 ?? 0)) - ($total2 ?? 0);
                             ?>
                             <tr>
-                                <th colspan="2">Total Keseluruhan</th>
+                                <th colspan="2">Total Saldo Akhir</th>
                                 <td style="width: 300px !important;"><?= rupiahin($totalKeseluruhan) ?></td>
                             </tr>
                         </table>
