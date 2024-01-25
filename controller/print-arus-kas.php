@@ -299,7 +299,7 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             $totalKeseluruhan = (($total1 ?? 0) + ($total3 ?? 0)) - ($total2 ?? 0);
             ?>
             <tr>
-                <th colspan="2">Total Saldo Akhir</th>
+                <th colspan="2">Total Saldo Akhir Kas</th>
                 <td style="width: 300px !important;"><?= rupiahin($totalKeseluruhan) ?></td>
             </tr>
         </table>

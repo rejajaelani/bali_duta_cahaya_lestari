@@ -379,7 +379,7 @@ if (isset($_GET['src-month'])) {
                             $totalKeseluruhan = (($total1 ?? 0) + ($total3 ?? 0)) - ($total2 ?? 0);
                             ?>
                             <tr>
-                                <th colspan="2">Total Saldo Akhir</th>
+                                <th colspan="2">Total Saldo Akhir Kas</th>
                                 <td style="width: 300px !important;"><?= rupiahin($totalKeseluruhan) ?></td>
                             </tr>
                         </table>
