@@ -156,6 +156,17 @@ if (isset($_GET['src-month'])) {
                                 </form>
                             </div>
                         </div>
+                        <table class="table table-bordered" style="font-size: 16px !important;">
+                            <?php
+                            $sqlSaldoAwal = "SELECT SUM(tdj.`debet`) AS debet FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Kas' AND tdj.`id_jurnal` = (SELECT tdj.`id_jurnal` FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Modal') GROUP BY tdj.`id_jurnal`";
+                            $resultSaldoAwal = mysqli_query($conn, $sqlSaldoAwal);
+                            $rowSaldoAwal = $resultSaldoAwal->fetch_assoc()
+                            ?>
+                            <tr>
+                                <th colspan="2">Saldo Awal</th>
+                                <td style="width: 300px !important;font-weight: bold;"><?= rupiahin($rowSaldoAwal['debet']) ?></td>
+                            </tr>
+                        </table>
                         <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
                             <thead>
                                 <tr>
@@ -168,7 +179,7 @@ if (isset($_GET['src-month'])) {
                                 $result = mysqli_query($conn, $sql);
                                 $sql2 = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE tj.`type_transaksi` = 1 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth AND ta.`nama` = 'Kas' AND tdj.`kredit` != 0 GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` DESC";
                                 $result2 = mysqli_query($conn, $sql2);
-                                if ($result->num_rows > 0) {
+                                if ($result->num_rows > 0 || $result2->num_rows > 0) {
                                     $total1 = 0;
                                     $nilaiDebet = 0;
                                     $nilaiKredit = 0;
@@ -187,7 +198,7 @@ if (isset($_GET['src-month'])) {
                                         if ($row2['keterangan'] == $row2['keterangan']) {
                                         }
                                         echo "<td>" . $row2['keterangan'] . "</td>";
-                                        echo "<td style='width: 300px !important;'>" . rupiahin($row2['kredit']) . "</td>";
+                                        echo "<td style='width: 300px !important;'>" . rupiahin(-$row2['kredit']) . "</td>";
                                         echo "<td></td>";
                                         echo "</tr>";
                                         $nilaiKredit += $row2['kredit'];
@@ -250,6 +261,7 @@ if (isset($_GET['src-month'])) {
                                     $totalModal = 0;
                                     $totalPrive = 0;
                                     $nilaiModal = 0;
+                                    $nilaiKasKredit = 0;
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
                                         if ($row['keterangan'] == $row['keterangan']) {
@@ -273,6 +285,7 @@ if (isset($_GET['src-month'])) {
                                             echo "<td></td>";
                                         }
                                         echo "</tr>";
+                                        $nilaiKasKredit += $row['kredit'];
                                         $totalModal += $nilaiModal;
                                     }
                                     $sqlPrive = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE tj.`type_transaksi` = 3 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth AND ta.`nama` = 'Prive' GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` ASC";
