@@ -76,18 +76,18 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             <h3 style="padding: 0 0 5px 0;margin: 0;text-align: center;margin-bottom: 10px;">Arus Kas</h3>
             <h5 style="padding: 0 0 5px 0;margin: 0;">Priode <?= $namaBulan . " " . $selectedYear ?></h5>
         </div>
-        <table class="table table-bordered" style="font-size: 16px !important;">
+        <table class="table table-bordered d-none" style="font-size: 16px !important;display: none;">
             <?php
             $sqlSaldoAwal = "SELECT SUM(tdj.`debet`) AS debet FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Kas' AND tdj.`id_jurnal` = (SELECT tdj.`id_jurnal` FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Modal') GROUP BY tdj.`id_jurnal`";
             $resultSaldoAwal = mysqli_query($conn, $sqlSaldoAwal);
             $rowSaldoAwal = $resultSaldoAwal->fetch_assoc()
             ?>
             <tr>
-                <th colspan="2">Saldo Awal</th>
+                <th colspan="2">Saldo Awal Kas</th>
                 <td style="width: 300px !important;font-weight: bold;"><?= rupiahin($rowSaldoAwal['debet']) ?></td>
             </tr>
         </table>
-        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;">
+        <table id="example1" class="table table-bordered table-striped" style="font-size: 16px !important;margin-top: -2px;">
             <thead>
                 <tr>
                     <th colspan="3">Arus Kas dari Aktifitas Operasional</th>
@@ -175,7 +175,7 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE tj.`type_transaksi` = 3 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth AND ta.`nama` = 'Modal' GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` ASC";
+                $sql = "SELECT tj.`keterangan`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') AS bulan_transaksi, SUM(tdj.`debet`) AS debet, SUM(tdj.`kredit`) AS kredit FROM tb_jurnal tj JOIN tb_detail_jurnal tdj ON tj.`id_jurnal` = tdj.`id_jurnal` LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE tj.`type_transaksi` = 3 AND YEAR(tdj.created_at) = $selectedYear AND MONTH(tdj.created_at) = $selectedMonth AND ta.`nama` = 'Modal' OR ta.`nama` = 'Utang Bank' GROUP BY tj.`id_jurnal`, DATE_FORMAT(tdj.`created_at`, '%Y-%m') ORDER BY tj.`created_at` ASC";
                 $result = mysqli_query($conn, $sql);
                 if ($result->num_rows > 0) {
                     $totalModal = 0;
@@ -299,7 +299,7 @@ $namaBulan = date("F", mktime(0, 0, 0, $selectedMonth, 1, $selectedYear));
             $totalKeseluruhan = (($total1 ?? 0) + ($total3 ?? 0)) - ($total2 ?? 0);
             ?>
             <tr>
-                <th colspan="2">Total Keseluruhan</th>
+                <th colspan="2">Total Saldo Akhir</th>
                 <td style="width: 300px !important;"><?= rupiahin($totalKeseluruhan) ?></td>
             </tr>
         </table>

@@ -156,7 +156,7 @@ if (isset($_GET['src-month'])) {
                                 </form>
                             </div>
                         </div>
-                        <table class="table table-bordered" style="font-size: 16px !important;">
+                        <table class="table table-bordered d-none" style="font-size: 16px !important;">
                             <?php
                             $sqlSaldoAwal = "SELECT SUM(tdj.`debet`) AS debet FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Kas' AND tdj.`id_jurnal` = (SELECT tdj.`id_jurnal` FROM tb_detail_jurnal tdj LEFT OUTER JOIN tb_akun ta ON ta.`id_akun` = tdj.`id_akun` WHERE ta.`nama` = 'Modal') GROUP BY tdj.`id_jurnal`";
                             $resultSaldoAwal = mysqli_query($conn, $sqlSaldoAwal);
