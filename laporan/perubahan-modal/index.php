@@ -225,13 +225,14 @@ $result4 = mysqli_query($conn, $sql4);
                                     }
                                     $totalBeban += $nilaiB;
                                 }
-                                $totalModalAwal = $modalAwal + ($totalPendapatan - $totalBeban);
+                                //$totalModalAwal = $modalAwal + ($totalPendapatan - $totalBeban);
                                 $totalLabaBersih = 0;
                                 if ($totalBeban < 0) {
                                     $totalLabaBersih = $totalBeban + $totalPendapatan;
                                 } else {
                                     $totalLabaBersih = $totalPendapatan - $totalBeban;
                                 }
+                                $totalModalAwal = $modalAwal + $totalLabaBersih;
                                 $totalLabaBersihString = ($totalLabaBersih == 0) ? "-" : rupiahin($totalLabaBersih);
                                 $totalModalAwalString = ($totalModalAwal == 0) ? "-" : rupiahin($totalModalAwal);
                                 ?>
